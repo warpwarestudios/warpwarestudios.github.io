@@ -1,0 +1,56 @@
+ div {
+     width: 100%;
+     clear: left;
+     float: left;
+     margin-bottom: 20px;
+     padding: 10px;
+ }
+ label {
+     clear: left;
+     float: left;
+     font-weight: bold;
+     width: 150px;
+ }
+ button {
+     clear: left;
+     float: left;
+     margin: 10px 0;
+     padding: 10px;
+     clear: left;
+     float: left;
+     font-weight: bold;
+     width: 150px;
+ }
+
+ span {
+     float: left;
+ }
+
+ div.resources {
+     border: 1px solid black;
+     margin-left: 37%;
+     margin-right: 37%;
+     width: 25%;
+ }
+ div.upgrades {
+     border: 1px solid black;
+     width: 98%;
+ }
+ div.leftpanels {
+     margin-left: 4px;
+     clear: left;
+     width: 45%;
+ }
+
+ div.rightpanels {
+     clear: none;
+     float: right;
+     margin-right: 40px;
+     width: 45%;
+ }
+
+ div.generators, div.miners, div.lifesupport, div.farms, div.materialstorage, div.oxygenstorage, div.foodstorage {
+     border: 1px solid black;
+     margin-left: 0px;
+     clear: none;
+ }

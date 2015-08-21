@@ -3,6 +3,7 @@
 <link rel="stylesheet" type="text/css" href="interface.css" />
 </head>
 <body>
+<<<<<<< HEAD
 	Date: <span id="date"></span>
 	<br \>
 	Population: <span id="population"></span>
@@ -75,5 +76,72 @@
 	<br \>
 	
 	<script type="text/javascript" src="main.js"></script>
+=======
+	<div class="resources">
+    <label>Date:</label> <span id="date"></span>
+
+    <label>Population:</label> <span id="population"></span>
+
+    <label>Energy:</label> <span id="energy"></span>
+
+    <label>Oxygen:</label> <span id="oxygen"></span>
+
+    <label>Materials:</label> <span id="materials"></span>
+
+    <label>Food:</label> <span id="food"></span>
+
+    <br>
+    <button onclick="awakenPerson()">Awaken</button>
+</div>
+<div class="upgrades">
+    <div class="leftpanels">
+        <div class="generators">
+            <label>Generators:</label> <span id="generators">1</span> 
+            <button onclick="buyGenerator()">Buy Generator</button>
+            <label>Generator Cost:</label> <span id="genCost">10</span>
+
+        </div>
+        <div class="miners">
+            <label>Miners:</label> <span id="miners">0</span> 
+            <button onclick="buyMiner()">Buy Miner</button>
+            <label>Miner Cost:</label> <span id="minerCost">10</span>
+
+        </div>
+        <div class="lifesupport">
+            <label>Life Support:</label> <span id="lifesupport">0</span> 
+            <button onclick="buyLifeSupport()">Buy Life Support</button>
+            <label>Life Support Cost:</label> <span id="lsCost">10</span>
+
+        </div>
+        <div class="farms">
+            <label>Farms:</label> <span id="farms">0</span> 
+            <button onclick="buyFarm()">Buy Farm</button>
+            <label>Farms Cost:</label> <span id="farmCost">10</span>
+
+        </div>
+    </div>
+    <div class="rightpanels">
+        <div class="materialstorage">
+            <label>Material Storage:</label> <span id="materialStorage">0</span> 
+            <button onclick="buyMaterialStorage()">Buy Material Storage</button>
+            <label>Material Storage Cost:</label> <span id="materialStorageCost">10</span>
+
+        </div>
+        <div class="oxygenstorage">
+            <label>Oxygen Storage:</label> <span id="oxygenStorage">0</span> 
+            <button onclick="buyOxygenStorage()">Buy Oxygen Storage</button>
+            <label>Oxygen Storage Cost:</label> <span id="oxygenStorageCost">10</span>
+
+        </div>
+        <div class="foodstorage">
+            <label>Food Storage:</label> <span id="foodStorage">0</span> 
+            <button onclick="buyFoodStorage()">Buy Food Storage</button>
+            <label>Food Storage Cost:</label> <span id="foodStorageCost">10</span>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="main.js"></script>	
+>>>>>>> origin/master
 </body>
 </html>

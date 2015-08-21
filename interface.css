@@ -1,4 +1,4 @@
-div {
+ div {
      width: 100%;
      clear: left;
      float: left;
@@ -34,17 +34,19 @@ div {
  }
  div.upgrades {
      border: 1px solid black;
+     width: 98%;
  }
  div.leftpanels {
      margin-left: 4px;
      clear: left;
-     width: 48%;
+     width: 45%;
  }
 
  div.rightpanels {
      clear: none;
      float: right;
-     width: 48%;
+     margin-right: 40px;
+     width: 45%;
  }
 
  div.generators, div.miners, div.lifesupport, div.farms, div.materialstorage, div.oxygenstorage, div.foodstorage {

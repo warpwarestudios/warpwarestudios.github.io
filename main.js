@@ -2,37 +2,34 @@
 var energy = 0;
 var energymax = 0;
 var oxygen = 100;
-var oxygenmax = 100;
 var materials = 100;
-var materialsmax = 100;
 var food = 100;
-var foodmax = 100;
+var water = 100;
+var ice = 0;
+var metals = 100;
 var date = 0;
 var population = 1;
 var populationmax = 10;
+var storagemax = 100;
 
 //storage
-var oxygenstorage = 1;
-var foodstorage = 1;
-var materialstorage = 1;
+var storage = 1;
 
 
 //buildings
 var generators = 1; //increases maximum energy
-var miners = 0; //increases resources/second
+var autominers = 0; //increases resources/second
 var lifesupport = 0; //increases oxygen supplies
 var farms = 0; //increases food supplies
-
+var refineries = 0; //turns ice into water
 
 function newDay(){
 	updateEnergy();
-	date = date + 1;
 	updateOxygen();
 	updateMaterials();
+	updateWater();
 	updateFood();
 	updatePopulation();
-	updateStorage();
-	document.getElementById("date").innerHTML = date;
 }
 
 function awakenPerson()
@@ -45,12 +42,12 @@ function awakenPerson()
 
 function buyGenerator(){
     var genCost = Math.floor(10 * Math.pow(1.1,generators));
-    if(materials >= genCost){                               
+    if(metals >= genCost){                               
         generators = generators + 1;                                   
-    	materials = materials - genCost;                        
+    	metals = metals - genCost;                        
         document.getElementById('generators').innerHTML = generators;  
-       	var materialsTotal = materials + "/" + materialsmax;
-		document.getElementById("materials").innerHTML = materialsTotal;
+       	var metalsTotal = metals + "/" + storagemax;
+		document.getElementById("metals").innerHTML = metalsTotal;
     };
     var nextCost = Math.floor(10 * Math.pow(1.1,generators));
     document.getElementById('genCost').innerHTML = nextCost;
@@ -58,132 +55,271 @@ function buyGenerator(){
 
 function buyMiner(){
 	updateEnergy(); //calculate current energy
-    var minerCost = Math.floor(10 * Math.pow(1.1,miners));
-    if(materials >= minerCost && energy < energymax){                               
-        miners = miners + 1;                                   
-    	materials = materials - minerCost;                        
-        document.getElementById('miners').innerHTML = miners;  
-       	var materialsTotal = materials + "/" + materialsmax;
-		document.getElementById("materials").innerHTML = materialsTotal;
+    var minerCost = Math.floor(10 * Math.pow(1.1,autominers));
+    if(metals >= minerCost && energy < energymax){                               
+        autominers = autominers + 1;                                   
+    	metals = metals - minerCost;                        
+        document.getElementById('miners').innerHTML = autominers;  
+       	var metalsTotal = metals + "/" + storagemax;
+		document.getElementById("metals").innerHTML = metalsTotal;
     };
-    var nextCost = Math.floor(10 * Math.pow(1.1,miners));
+    var nextCost = Math.floor(10 * Math.pow(1.1,autominers));
     document.getElementById('minerCost').innerHTML = nextCost;
 };
 
 function buyLifeSupport(){
 	updateEnergy(); //calculate current energy
     var lsCost = Math.floor(10 * Math.pow(1.1,lifesupport));
-    if(materials >= lsCost && energy < energymax){                               
+    if(metals >= lsCost && energy < energymax){                               
         lifesupport = lifesupport + 1;                                   
-    	materials = materials - lsCost;                        
+    	metals = metals - lsCost;                        
         document.getElementById('lifesupport').innerHTML = lifesupport;  
-       	var materialsTotal = materials + "/" + materialsmax;
-		document.getElementById("materials").innerHTML = materialsTotal;
+       	var metalsTotal = metals + "/" + storagemax;
+		document.getElementById("metals").innerHTML = metalsTotal;
     };
     var nextCost = Math.floor(10 * Math.pow(1.1,lifesupport));
     document.getElementById('lsCost').innerHTML = nextCost;
 };
 
-function buyFarm(){
+function buyHydroponics(){
 	updateEnergy(); //calculate current energy
     var farmCost = Math.floor(10 * Math.pow(1.1,farms));
-    if(materials >= farmCost && energy < energymax){                               
+    if(metals >= farmCost && energy < energymax){                               
         farms = farms + 1;                                   
-    	materials = materials - farmCost;                        
-        document.getElementById('farms').innerHTML = farms;  
-       	var materialsTotal = materials + "/" + materialsmax;
-		document.getElementById("materials").innerHTML = materialsTotal;
+    	metals = metals - farmCost;                        
+        document.getElementById('hydroponics').innerHTML = farms;  
+       	var metalsTotal = metals + "/" + storagemax;
+		document.getElementById("metals").innerHTML = metalsTotal;
     };
     var nextCost = Math.floor(10 * Math.pow(1.1, farms));
-    document.getElementById('farmCost').innerHTML = nextCost;
+    document.getElementById('hydroponicsCost').innerHTML = nextCost;
 };
 
-function buyMaterialStorage(){
+function buyRefinery(){
 	updateEnergy(); //calculate current energy
-    var mStoreCost = Math.floor(10 * Math.pow(1.1,materialstorage));
-    if(materials >= mStoreCost && energy < energymax){                               
-        materialstorage = materialstorage + 1;                                   
-    	materials = materials - mStoreCost;                        
-        document.getElementById('materialStorage').innerHTML = materialstorage;  
-       	materialsmax = materialstorage * 100;
-		var materialsTotal = materials + "/" + materialsmax;
-		document.getElementById("materials").innerHTML = materialsTotal;
+    var refCost = Math.floor(10 * Math.pow(1.1,refineries));
+    if(metals >= refCost && energy < energymax){                               
+        refineries = refineries + 1;                                   
+    	metals = metals - refCost;                        
+        document.getElementById('refineries').innerHTML = refineries;  
+       	var metalsTotal = metals + "/" + storagemax;
+		document.getElementById("metals").innerHTML = metalsTotal;
     };
-    var nextCost = Math.floor(10 * Math.pow(1.1, materialstorage));
-    document.getElementById('materialStorageCost').innerHTML = nextCost;
+    var nextCost = Math.floor(10 * Math.pow(1.1, refineries));
+    document.getElementById('IceRefineryCost').innerHTML = nextCost;
 };
 
-function buyOxygenStorage(){
+function buyStorage(){
 	updateEnergy(); //calculate current energy
-    var oStoreCost = Math.floor(10 * Math.pow(1.1,oxygenstorage));
-    if(materials >= oStoreCost && energy < energymax){                               
-        oxygenstorage = oxygenstorage + 1;                                   
-    	materials = materials - oStoreCost;                        
-        document.getElementById('oxygenStorage').innerHTML = oxygenstorage;  
-       	oxygenmax = oxygenstorage * 100;
-		var materialsTotal = materials + "/" + materialsmax;
-		document.getElementById("materials").innerHTML = materialsTotal;
+    var mStoreCost = Math.floor(10 * Math.pow(1.1,storage));
+    if(metals >= mStoreCost && energy < energymax){                               
+        storage = storage + 1;                                   
+    	metals = metals - mStoreCost;                        
+        storagemax = storage * 100;
+		document.getElementById('storage').innerHTML = storage;  
+       	var metalsTotal = metals + "/" + storagemax;
+		document.getElementById("metals").innerHTML = metalsTotal;
     };
-    var nextCost = Math.floor(10 * Math.pow(1.1, oxygenstorage));
-    document.getElementById('oxygenStorageCost').innerHTML = nextCost;
-};
-
-
-function buyFoodStorage(){
-	updateEnergy(); //calculate current energy
-    var fStoreCost = Math.floor(10 * Math.pow(1.1,foodstorage));
-    if(materials >= fStoreCost && energy < energymax){                               
-        foodstorage = foodstorage + 1;                                   
-    	materials = materials - fStoreCost;                        
-        document.getElementById('foodStorage').innerHTML = foodstorage;  
-		foodmax = foodstorage * 100;
-		var materialsTotal = materials + "/" + materialsmax;
-		document.getElementById("materials").innerHTML = materialsTotal;
-    };
-    var nextCost = Math.floor(10 * Math.pow(1.1, foodstorage));
-    document.getElementById('foodStorageCost').innerHTML = nextCost;
+    var nextCost = Math.floor(10 * Math.pow(1.1, storage));
+    document.getElementById('StorageCost').innerHTML = nextCost;
 };
 
 
 function updateEnergy(){
-	energy = miners + lifesupport + farms + materialstorage + oxygenstorage + foodstorage;
-	energymax = 5 * generators;
+	energy = autominers + lifesupport + farms + storage;
+	energymax = 50 * generators;
 	var energyTotal = energy + "/" + energymax;
 	
 	document.getElementById("energy").innerHTML = energyTotal;
 }
-function updateOxygen(){
-	oxygen = oxygen - population + lifesupport;
-	oxygenmax = oxygenstorage * 100;
-	if(oxygen > oxygenmax)
+function updateMaterials(){
+	var random;
+	
+	//calculate maximum storage
+	storagemax = storage * 100;
+
+	//for each automated miner generate either ice or metal
+	//if max, only generate the other one, because your miners
+	//are intelligent
+	if(metals == storagemax)
 	{
-		oxygen = oxygenmax;
+		ice = ice + autominers;
+	}
+	else if (ice == storagemax)
+	{
+		metals = metals + autominers;
+	}
+	else
+	{
+		for(i=0; i < autominers; i++)
+		{	
+			random = Math.random() * 100;
+			if(random > 50)
+			{
+				metals = metals + 1;
+			}
+			else
+			{
+				ice = ice + 1;
+			}
+		}	
+	}
+	
+	//check maximum and minimum
+	if(metals > storagemax)
+	{
+		metals = storagemax;
+	}
+	if(metals < 0)
+	{
+		metals = 0;
+	}
+	if(ice > storagemax)
+	{
+		ice = storagemax;
+	}
+	if(ice < 0)
+	{
+		ice = 0;
+	}
+	//put metals in the html
+	var metalsTotal = metals + "/" + storagemax;
+	document.getElementById("metals").innerHTML = metalsTotal;
+	//put ice in the html
+	var iceTotal = ice + "/" + storagemax;
+	document.getElementById("ice").innerHTML = iceTotal;
+}
+
+function updateOxygen(){
+	oxygen = oxygen - population;
+	storagemax = storage * 100;
+	
+	if(oxygen < storagemax)
+	{
+		generateOxygen();
+	}
+	if(oxygen > storagemax)
+	{
+		oxygen = storagemax;
+	}
+	if (oxygen < 0)
+	{
+		oxygen = 0;
+		//not enough supplies means people die
+		population = population - 1;
+		if (population < 1)
+		{
+			population = 1;
+		}
 	}		
-	var oxygenTotal = oxygen + "/" + oxygenmax;
+	var oxygenTotal = oxygen + "/" + storagemax;
 	
 	document.getElementById("oxygen").innerHTML = oxygenTotal;
 }
-function updateMaterials(){
-	materials = materials + miners;
-	materialsmax = materialstorage * 100;
-	if(materials > materialsmax)
-	{
-		materials = materialsmax;
-	}		
-	var materialsTotal = materials + "/" + materialsmax;
-	
-	document.getElementById("materials").innerHTML = materialsTotal;
-}
+
 function updateFood(){
-	food = food - population + farms;
-    foodmax = foodstorage * 100;
-	if(food > foodmax)
+	
+	food = food - population;
+	storagemax = storage * 100;
+	if(food < storagemax)
 	{
-		food = foodmax;
+		generateFood();
+	}
+	if(food > storagemax)
+	{
+		food = storagemax;
+	}
+	if(food < 0)
+	{
+		food = 0;
+		//not enough supplies means people die
+		population = population - 1;
+		if (population < 1)
+		{
+			population = 1;
+		}
 	}		
-	var foodTotal = food + "/" + foodmax;
+	var foodTotal = food + "/" + storagemax;
 	
 	document.getElementById("food").innerHTML = foodTotal;
+}
+
+function updateWater(){
+	water = water - population;
+	storagemax = storage * 100;
+	if(water < storagemax)
+	{
+		generateWater();
+	}
+	if(water > storagemax)
+	{
+		water = storagemax;
+	}
+	if (water < 0)
+	{
+		water = 0;
+		//not enough supplies means people die
+		population = population - 1;
+		if (population < 1)
+		{
+			population = 1;
+		}
+	}		
+	var waterTotal = water + "/" + storagemax;
+	
+	document.getElementById("water").innerHTML = waterTotal;
+}
+
+
+//melt ice to create water
+function generateWater()
+{
+	//if there isn't enough ice, take what there is
+	if (ice < refineries)
+	{
+		water = water + ice;
+		ice = 0;
+	}
+	//otherwise ice is equal or greater than the melters
+	else
+	{
+		water = water + refineries;
+		ice = ice - refineries;
+	}
+}
+
+//generate oxygen using water
+function generateOxygen()
+{
+	//if there isn't enough water, take what there is
+	if (water < lifesupport)
+	{
+		oxygen = oxygen + water;
+		water = 0;
+	}
+	//otherwise water is equal or greater than the lifesupport
+	else
+	{
+		oxygen = oxygen + lifesupport;
+		water = water - lifesupport;
+	}
+}
+
+//generate food using water
+function generateFood()
+{
+	//if there isn't enough water, take what there is
+	if (water < farms)
+	{
+		food = food + water;
+		water = 0;
+	}
+	//otherwise water is equal or greater than the hydroponics
+	else
+	{
+		food = food + farms;
+		water = water - farms;
+	}
 }
 
 function updatePopulation(){

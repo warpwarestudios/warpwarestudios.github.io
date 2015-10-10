@@ -274,13 +274,13 @@ function generateWater()
 	//if there isn't enough ice, take what there is
 	if (ice < refineries)
 	{
-		water = water + (ice * 3);
+		water = water + (ice * 7);
 		ice = 0;
 	}
 	//otherwise ice is equal or greater than the melters
 	else
 	{
-		water = water + (refineries * 3);
+		water = water + (refineries * 7);
 		ice = ice - refineries;
 	}
 }
@@ -291,13 +291,13 @@ function generateOxygen()
 	//if there isn't enough water, take what there is
 	if (water < lifesupport)
 	{
-		oxygen = oxygen + water;
+		oxygen = oxygen + (water * 5);
 		water = 0;
 	}
 	//otherwise water is equal or greater than the lifesupport
 	else
 	{
-		oxygen = oxygen + lifesupport;
+		oxygen = oxygen + (lifesupport * 5);
 		water = water - lifesupport;
 	}
 }
@@ -308,13 +308,13 @@ function generateFood()
 	//if there isn't enough water, take what there is
 	if (water < farms)
 	{
-		food = food + water;
+		food = food + (water * 5);
 		water = 0;
 	}
 	//otherwise water is equal or greater than the hydroponics
 	else
 	{
-		food = food + farms;
+		food = food + (farms * 5);
 		water = water - farms;
 	}
 }

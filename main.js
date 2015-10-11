@@ -9,7 +9,7 @@ var ice = 0;
 var metals = 100;
 var date = 0;
 var workers = 0;
-var population = 1;
+var population = 0;
 var populationmax = 1;
 var storagemax = 100;
 
@@ -34,6 +34,19 @@ function newDay(){
 	updateWater();
 	updateFood();
 	updateCrew();
+}
+
+
+function Recruit()
+{
+	var genCost = 1;
+    if(oxygen >= genCost && water >= genCost && food >= genCost && population + workers < quarters){                               
+		
+		oxygen = oxygen - genCost;
+		food = food - genCost;
+		water = water - genCost;
+		population = population + 1;                                          
+    };
 }
 
 function buyCrewQuarters()
@@ -67,8 +80,8 @@ function buyMiner(){
 	updateEnergy(); //calculate current energy
 	updateCrew(); // calculate current crew
     var minerCost = Math.floor(15 + (autominers/3));
-    if(metals >= minerCost && energy < energymax && population > 0){                               
-        autominers = autominers + 1;                                   
+    if(metals >= minerCost && energy < energymax && population > 0){
+    	autominers = autominers + 1;                                   
     	metals = metals - minerCost;                        
         document.getElementById('miners').innerHTML = autominers;  
        	var metalsTotal = metals + "/" + storagemax;
@@ -83,6 +96,8 @@ function buyLifeSupport(){
 	updateCrew(); // calculate current crew
     var lsCost = Math.floor(15 + (lifesupport/3));
     if(metals >= lsCost && energy < energymax && population > 0){                               
+        population = population - 1; 
+    	workers = workers + 1;                               
         lifesupport = lifesupport + 1;                                   
     	metals = metals - lsCost;                        
         document.getElementById('lifesupport').innerHTML = lifesupport;  
@@ -98,6 +113,8 @@ function buyHydroponics(){
 	updateCrew(); // calculate current crew
     var farmCost = Math.floor(15 + (farms/3));
     if(metals >= farmCost && energy < energymax && population > 0){                               
+        population = population - 1; 
+    	workers = workers + 1;                               
         farms = farms + 1;                                   
     	metals = metals - farmCost;                        
         document.getElementById('hydroponics').innerHTML = farms;  
@@ -113,6 +130,8 @@ function buyRefinery(){
 	updateCrew(); // calculate current crew
     var refCost = Math.floor(15 + (refineries/3));
     if(metals >= refCost && energy < energymax && population > 0){                               
+        population = population - 1; 
+    	workers = workers + 1;                               
         refineries = refineries + 1;                                   
     	metals = metals - refCost;                        
         document.getElementById('refineries').innerHTML = refineries;  
@@ -206,7 +225,7 @@ function updateMaterials(){
 }
 
 function updateOxygen(){
-	oxygen = oxygen - quarters;
+	oxygen = oxygen - (population + workers);
 	storagemax = storage * 50;
 	
 	if(oxygen < storagemax)
@@ -228,7 +247,7 @@ function updateOxygen(){
 
 function updateFood(){
 	
-	food = food - quarters;
+	food = food - (population + workers);
 	storagemax = storage * 50;
 	if(food < storagemax)
 	{
@@ -248,7 +267,7 @@ function updateFood(){
 }
 
 function updateWater(){
-	water = water - quarters;
+	water = water - (population + workers);
 	storagemax = storage * 50;
 	if(water < storagemax)
 	{
@@ -321,10 +340,8 @@ function generateFood()
 
 function updateCrew(){
 
-
-	workers = autominers + lifesupport + farms + refineries + research;
-	populationmax = 1 * quarters;
-	population = populationmax - workers;
+	
+	populationmax = 5 * quarters;
 	
 	//check for not enough water/food/etc and kill off population
 	//if worker is killed reduce efficiency of random resource until supplies are restored

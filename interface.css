@@ -26,9 +26,9 @@
 
  div.resources {
      border: 1px solid black;
-     margin-left: 37%;
-     margin-right: 37%;
-     width: 25%;
+     margin-left: 25%;
+     margin-right: 25%;
+     width: 50%;
  }
  div.upgrades {
      border: 1px solid black;

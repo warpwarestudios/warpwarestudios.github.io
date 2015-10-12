@@ -13,19 +13,17 @@
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span> 
       </button>
       <a class="navbar-brand" href="#">Flotilla</a>
     </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
+    <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">Resources</a></li>
-        <li><a href="#">Research</a></li>
-        <li><a href="#">Ship Construction</a></li> 
+        <li><a href="#">Play</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
@@ -35,78 +33,131 @@
   </div>
 </nav>
 
-<div class="page-header">
-	<h1>Resources</h1>
-</div>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#tabsNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
+      <a class="navbar-brand" href="#"></a>
+    </div>
+    <div class="collapse navbar-collapse" id="tabsNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a data-toggle="collapse" href="#resources">Resources</a></li>
+        <li><a data-toggle="collapse" href="#building">Building</a></li>
+        <li><a data-toggle="collapse" href="#research">Research</a></li>
+        <li><a data-toggle="collapse" href="#shipconstruction">Ship Construction</a></li> 
+      </ul>
+    </div>
+  </div>
+</nav>
 
-<div class="container">
-
-   <table class="table table-responsive"> 
-	   <tbody>
-	   		<tr id="populationrow"><td>Population:</td><td><span id="population" data-toggle="tooltip" data-placement="right" title="Workers/Free/Maximum"></span></td><td><button class="btn btn-default btn-xs glyphicon glyphicon-user" onclick="Recruit()"> Recruit</button></td></tr>
-	   		<tr id="energyrow"><td>Energy:</td><td id="energy"></td><td></td></tr>
-	   		<tr id="metalsrow"><td>Metals:</td><td id="metals"></td><td></td></tr>
-	   		<tr id="icerow"><td>Ice:</td><td id="ice"></td><td></td></tr>
-	   		<tr id="oxygenrow"><td>Oxygen:</td><td id="oxygen"></td><td></td></tr>
-	   		<tr id="foodrow"><td>Food:</td><td id="food"></td><td></td></tr>
-	   		<tr id="waterrow"><td>Water:</td><td id="water"></td><td></td></tr>
-	   		<tr id="creditsrow"><td>Credits:</td><td id="credits"></td><td></td></tr>
-	   		<tr id="researchrow"><td>Research:</td><td id="researchpoints"></td><td></td></tr>
-	   </tbody>
-   </table> 
-</div>
-
-<div class="page-header">
-	<h1>Facilities</h1>
-	<button class="btn btn-default btn-sm"><span class="badge">Owned</span></button> <span class="badge">Cost</span>
-</div>
-	
-<div class="container">
-	<div class="row">
-		<div class="col-sm-4">
-			<button class="btn btn-default btn-sm" onclick="buyMiner()">Buy Automated Miner <span class="badge"id="miners">0</span></button>
-	        <span class="badge" id="minerCost" data-toggle="tooltip" data-placement="top" title="Cost">15</span>
-	    </div>
-	    <div class="col-sm-4">
-			<button class="btn btn-default btn-sm" onclick="buyLifeSupport()">Buy Oxygen Generator <span class="badge"id="lifesupport">0</span></button>
-	        <span class="badge" id="lsCost">15</span>
-	    </div>
-	    <div class="col-sm-4">
-			<button class="btn btn-default btn-sm" onclick="buyHydroponics()">Buy Hydroponic Farm <span class="badge"id="hydroponics">0</span></button>
-	        <span class="badge" id="hydroponicsCost">15</span>
-	    </div>
+<div class="container-fluid collapse in" id="resources">
+	<div class="page-header">
+		<h1>Resources</h1>
 	</div>
-	<div class="row">
-		<div class="col-sm-4">
-			<button class="btn btn-default btn-sm" onclick="buyRefinery()">Buy Ice Refinery <span class="badge"id="refineries">0</span></button>
-	        <span class="badge" id="IceRefineryCost">15</span>
-	    </div>
-	    <div class="col-sm-4">
-			<button class="btn btn-default btn-sm" onclick="buyResearchLab()">Buy Research Lab <span class="badge"id="labs">0</span></button>
-	        <span class="badge" id="ResearchLabsCost">100</span></span>
-	    </div>
-	    <div class="col-sm-4">
-			<button class="btn btn-default btn-sm" onclick="#">Buy Combat <span class="badge"id="combat">0</span></button>
-	        <span class="badge" id="combatCost">15</span></span>
-	    </div>
+
+	<div class="container">
+
+	   <table class="table table-responsive"> 
+		   <tbody>
+		   		<tr id="populationrow"><td>Population:</td><td><span id="population" data-toggle="tooltip" data-placement="right" title="Workers/Free/Maximum"></span></td><td><button class="btn btn-default btn-xs glyphicon glyphicon-user" onclick="Recruit()"> Recruit</button></td></tr>
+		   		<tr id="energyrow"><td>Energy:</td><td id="energy"></td><td></td></tr>
+		   		<tr id="metalsrow"><td>Metals:</td><td id="metals"></td><td></td></tr>
+		   		<tr id="icerow"><td>Ice:</td><td id="ice"></td><td></td></tr>
+		   		<tr id="oxygenrow"><td>Oxygen:</td><td id="oxygen"></td><td></td></tr>
+		   		<tr id="foodrow"><td>Food:</td><td id="food"></td><td></td></tr>
+		   		<tr id="waterrow"><td>Water:</td><td id="water"></td><td></td></tr>
+		   		<tr id="creditsrow"><td>Credits:</td><td id="credits"></td><td></td></tr>
+		   		<tr id="researchrow"><td>Research:</td><td id="researchpoints"></td><td></td></tr>
+		   </tbody>
+	   </table> 
 	</div>
-	<div class="row">
-		<div class="col-sm-4">
-			<button class="btn btn-default btn-sm" onclick="buyGenerator()">Buy Generator <span class="badge" id="generators">1</span></button>
-	        <span class="badge" id="genCost">25</span></span>
-	    </div>
-	    <div class="col-sm-4">
-			<button class="btn btn-default btn-sm" onclick="buyStorage()">Buy Storage <span class="badge" id="storage">0</span></button>
-	        <span class="badge" id="StorageCost">50</span></span>
-	    </div>
-	    <div class="col-sm-4">
-			<button class="btn btn-default btn-sm" onclick="buyCrewQuarters()">Buy Crew Quarters <span class="badge"id="quarters">1</span></button>
-	        <span class="badge" id="qsCost">10</span></span>
-	    </div>
+</div>
+
+<div class="container-fluid collapse in" id="building">
+
+	<div class="page-header">
+		<h1>Building</h1>
+		<button class="btn btn-default btn-sm"><span class="badge">Owned</span></button> <span class="badge">Cost</span>
 	</div>
 		
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-4">
+				<button class="btn btn-default btn-sm" onclick="buyMiner()">Buy Automated Miner <span class="badge"id="miners">0</span></button>
+		        <span class="badge" id="minerCost" data-toggle="tooltip" data-placement="top" title="Cost">15</span>
+		    </div>
+		    <div class="col-sm-4">
+				<button class="btn btn-default btn-sm" onclick="buyLifeSupport()">Buy Oxygen Generator <span class="badge"id="lifesupport">0</span></button>
+		        <span class="badge" id="lsCost">15</span>
+		    </div>
+		    <div class="col-sm-4">
+				<button class="btn btn-default btn-sm" onclick="buyHydroponics()">Buy Hydroponic Farm <span class="badge"id="hydroponics">0</span></button>
+		        <span class="badge" id="hydroponicsCost">15</span>
+		    </div>
+		</div>
+		<div class="row">
+			<div class="col-sm-4">
+				<button class="btn btn-default btn-sm" onclick="buyRefinery()">Buy Ice Refinery <span class="badge"id="refineries">0</span></button>
+		        <span class="badge" id="IceRefineryCost">15</span>
+		    </div>
+		    <div class="col-sm-4">
+				<button class="btn btn-default btn-sm" onclick="buyResearchLab()">Buy Research Lab <span class="badge"id="labs">0</span></button>
+		        <span class="badge" id="ResearchLabsCost">100</span></span>
+		    </div>
+		    <div class="col-sm-4">
+				<button class="btn btn-default btn-sm" onclick="#">Buy Combat <span class="badge"id="combat">0</span></button>
+		        <span class="badge" id="combatCost">15</span></span>
+		    </div>
+		</div>
+		<div class="row">
+			<div class="col-sm-4">
+				<button class="btn btn-default btn-sm" onclick="buyGenerator()">Buy Generator <span class="badge" id="generators">1</span></button>
+		        <span class="badge" id="genCost">25</span></span>
+		    </div>
+		    <div class="col-sm-4">
+				<button class="btn btn-default btn-sm" onclick="buyStorage()">Buy Storage <span class="badge" id="storage">0</span></button>
+		        <span class="badge" id="StorageCost">50</span></span>
+		    </div>
+		    <div class="col-sm-4">
+				<button class="btn btn-default btn-sm" onclick="buyCrewQuarters()">Buy Crew Quarters <span class="badge"id="quarters">1</span></button>
+		        <span class="badge" id="qsCost">10</span></span>
+		    </div>
+		</div>
+			
+	</div>
 </div>
    
+
+<div class="container-fluid collapse" id="research">
+	<div class="page-header">
+		<h1>Research</h1>
+	</div>
+	<div class="container">
+		<button class="btn btn-default btn-sm" onclick="researchAdvMining()">Advanced Mineral Production <span class="badge"id="advmininglevel">0</span> <span class="badge"id="advminingcost">100</span></button>
+		
+		<button class="btn btn-default btn-sm" onclick="researchAdvOxygen()">Advanced Oxygen Production <span class="badge"id="advoxygenlevel">0</span> <span class="badge"id="advoxygencost">100</span></button>
+		
+		<button class="btn btn-default btn-sm" onclick="researchAdvWater()">Advanced Water Production <span class="badge"id="advwaterlevel">0</span> <span class="badge"id="advwatercost">100</span></button>
+		
+		<button class="btn btn-default btn-sm" onclick="researchAdvFarming()">Advanced Food Production <span class="badge"id="advfarminglevel">0</span> <span class="badge"id="advfarmingcost">100</span></button>
+		
+		<button class="btn btn-default btn-sm" onclick="researchAdvResearch()">Advanced Research Application <span class="badge"id="advresearchlevel">0</span> <span class="badge"id="advresearchcost">100</span></button>
+		
+		<button class="btn btn-default btn-sm" onclick="researchAdvEconomy()">Advanced Economic Theory <span class="badge"id="adveconomylevel">0</span> <span class="badge"id="adveconomycost">100</span></button>
+	</div>
+
+</div>
+
+<div class="container-fluid collapse" id="shipconstruction">
+	<div class="page-header">
+		<h1>Ship Construction</h1>
+	</div>
+	<h3>Coming Soon</h3>
+</div>
 
 <script type="text/javascript" src="main.js"></script>	
 <script>

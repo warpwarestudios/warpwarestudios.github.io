@@ -41,6 +41,15 @@ var refineries = 1; //turns ice into water
 var researchlabs = 0; //research facility for new technology
 var combat = 0; 
 
+//research levels
+var baseCost = 100;
+var advancedmining = 0;
+var advancedoxygen = 0;
+var advancedwater = 0;
+var advancedfarming = 0;
+var advancedresearch = 0;
+var advancedincome = 0;
+
 function newDay(){
 	//reset
 	oxygenbonus = 0;
@@ -237,6 +246,9 @@ function updateEnergy(){
 function updateMaterials(){
 	var random;
 	
+	metalsbonus = 0;
+	icebonus = 0;
+
 	//calculate maximum storage
 	storagemax = storage * 50;
 
@@ -245,13 +257,17 @@ function updateMaterials(){
 	//are intelligent
 	if(metals == storagemax)
 	{
-		ice = ice + autominers;
-		icebonus = icebonus + autominers;
+		ice = ice + Math.floor(autominers * (1 + (0.05 * advancedmining)));
+		icebonus = icebonus + Math.floor(autominers * (1 + (0.05 * advancedmining)));
 	}
-	else if (ice == storagemax)
+	else if (ice == storagemax || ice == storagemax - icecost)
 	{
-		metals = metals + autominers;
-		metalsbonus = metalsbonus + autominers;
+		//put ice equal to cost into ice
+		ice = ice + Math.floor(icecost * (1 + (0.05 * advancedmining)));
+		icebonus = Math.floor(icecost * (1 + (0.05 * advancedmining)));
+		//put the rest into metals
+		metals = metals + Math.floor((autominers - icecost) * (1 + (0.05 * advancedmining)));
+		metalsbonus = metalsbonus + Math.floor((autominers - icecost) * (1 + (0.05 * advancedmining)));
 	}
 	else
 	{
@@ -260,15 +276,19 @@ function updateMaterials(){
 			random = Math.random() * 100;
 			if(random > 50)
 			{
-				metals = metals + 1;
 				metalsbonus = metalsbonus + 1;
 			}
 			else
 			{
-				ice = ice + 1;
 				icebonus = icebonus + 1;
 			}
 		}	
+
+		metals = metals + Math.floor(metalsbonus * (1 + (0.05 * advancedmining)));
+		metalsbonus = Math.floor(metalsbonus * (1 + (0.05 * advancedmining)));
+
+		ice = ice + Math.floor(icebonus * (1 + (0.05 * advancedmining)));
+		icebonus = Math.floor(icebonus * (1 + (0.05 * advancedmining)));
 	}
 	
 	//check maximum and minimum
@@ -420,16 +440,16 @@ function generateWater()
 	//if there isn't enough ice, take what there is
 	if (ice < refineries)
 	{
-		water = water + (ice * 7);
-		waterbonus = waterbonus + (ice * 7);
+		water = water + Math.floor((ice * 7) * (1 + (0.05 * advancedwater)));
+		waterbonus = waterbonus + Math.floor((ice * 7) * (1 + (0.05 * advancedwater)));
 		icecost = icecost + ice;
 		ice = 0;
 	}
 	//otherwise ice is equal or greater than the melters
 	else
 	{
-		water = water + (refineries * 7);
-		waterbonus = waterbonus + (refineries * 7);
+		water = water + Math.floor((refineries * 7) * (1 + (0.05 * advancedwater)));
+		waterbonus = waterbonus + Math.floor((refineries * 7) * (1 + (0.05 * advancedwater)));
 		ice = ice - refineries;
 		icecost = icecost + refineries;
 	}
@@ -441,16 +461,16 @@ function generateOxygen()
 	//if there isn't enough water, take what there is
 	if (water < lifesupport)
 	{
-		oxygen = oxygen + (water * 5);
-		oxygenbonus = oxygenbonus + (water *5)
+		oxygen = oxygen + Math.floor((water * 5) * (1 + (0.05 * advancedoxygen)));
+		oxygenbonus = oxygenbonus + Math.floor((water * 5) * (1 + (0.05 * advancedoxygen)));
 		watercost = watercost + water;
 		water = 0;
 	}
 	//otherwise water is equal or greater than the lifesupport
 	else
 	{
-		oxygen = oxygen + (lifesupport * 5);
-		oxygenbonus = oxygenbonus + (lifesupport * 5);
+		oxygen = oxygen + Math.floor((lifesupport * 5) * (1 + (0.05 * advancedoxygen)));
+		oxygenbonus = oxygenbonus + Math.floor((lifesupport * 5) * (1 + (0.05 * advancedoxygen)));
 		water = water - lifesupport;
 		watercost = watercost + lifesupport;
 	}
@@ -462,16 +482,16 @@ function generateFood()
 	//if there isn't enough water, take what there is
 	if (water < farms)
 	{
-		food = food + (water * 5);
-		foodbonus = foodbonus + (water * 5);
+		food = food + Math.floor((water * 5) * (1 + (0.05 * advancedfarming)));
+		foodbonus = foodbonus + Math.floor((water * 5) * (1 + (0.05 * advancedfarming)));
 		watercost = watercost + water;
 		water = 0;
 	}
 	//otherwise water is equal or greater than the hydroponics
 	else
 	{
-		food = food + (farms * 5);
-		foodbonus = foodbonus + (farms * 5);
+		food = food + Math.floor((farms * 5) * (1 + (0.05 * advancedfarming)));
+		foodbonus = foodbonus + Math.floor((farms * 5) * (1 + (0.05 * advancedfarming)));
 		water = water - farms;
 		watercost = watercost + farms;
 	}
@@ -488,9 +508,9 @@ function updateCrew(){
 	var popTotal = workers + "/" + population + "/" + populationmax;
 	
 	var taxablePop = workers + population;
-	creditsbonus = creditsbonus + taxablePop;
+	creditsbonus = creditsbonus + Math.floor(taxablePop * (1 + (0.05 * advancedincome)));
 	//add tax to current credits
-	credits = credits + taxablePop;
+	credits = credits + Math.floor(taxablePop * (1 + (0.05 * advancedincome)));
 	var creditsTotal = credits + " (+" + creditsbonus + ")";
 
 	if(taxablePop == populationmax && !document.getElementById("populationrow").className.match(/(?:^|\s)danger(?!\S)/))
@@ -510,10 +530,137 @@ function updateCrew(){
 
 function updateResearch(){
 	//add 1 point per number of research labs
-	researchpoints = researchpoints + researchlabs;
-	researchbonus = researchbonus + researchlabs;
+	researchpoints = researchpoints + Math.floor(researchlabs * (1 + (0.05 * advancedresearch)));
+	researchbonus = researchbonus + Math.floor(researchlabs * (1 + (0.05 * advancedresearch)));
 	var researchTotal = researchpoints + " (+" + researchbonus + ")";
 	document.getElementById("researchpoints").innerHTML = researchTotal;
+}
+
+//functions to buy research levels
+function researchAdvMining()
+{
+	var upgradeCost = Math.floor(baseCost * Math.pow(1.75,advancedmining)) - (Math.floor(baseCost * Math.pow(1.75,advancedmining)) % 5);
+    if(researchpoints >= upgradeCost && advancedmining < 10){                               
+        advancedmining = advancedmining + 1;
+        researchpoints = researchpoints - upgradeCost;
+
+        document.getElementById('advmininglevel').innerHTML = advancedmining;  
+       	document.getElementById("researchpoints").innerHTML = researchpoints;
+    };
+    if(advancedmining < 10)
+    {
+    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancedmining)) - (Math.floor(baseCost * Math.pow(1.75,advancedmining)) % 5);
+    }
+    else
+    {
+    	nextCost = "";
+    }
+    document.getElementById('advminingcost').innerHTML = nextCost;
+}
+
+function researchAdvOxygen()
+{
+	var upgradeCost = Math.floor(baseCost * Math.pow(1.75,advancedoxygen)) - (Math.floor(baseCost * Math.pow(1.75,advancedoxygen)) % 5);
+    if(researchpoints >= upgradeCost && advancedoxygen < 10){                               
+        advancedoxygen = advancedoxygen + 1;
+        researchpoints = researchpoints - upgradeCost;
+
+        document.getElementById('advoxygenlevel').innerHTML = advancedoxygen;  
+       	document.getElementById("researchpoints").innerHTML = researchpoints;
+    };
+    if(advancedoxygen < 10)
+    {
+    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancedoxygen)) - (Math.floor(baseCost * Math.pow(1.75,advancedoxygen)) % 5);
+    }
+    else
+    {
+    	nextCost = "";
+    }
+    document.getElementById('advoxygencost').innerHTML = nextCost;
+}
+
+function researchAdvWater()
+{
+	var upgradeCost = Math.floor(baseCost * Math.pow(1.75,advancedwater)) - (Math.floor(baseCost * Math.pow(1.75,advancedwater)) % 5);
+    if(researchpoints >= upgradeCost && advancedwater < 10){                               
+        advancedwater = advancedwater + 1;
+        researchpoints = researchpoints - upgradeCost;
+
+        document.getElementById('advwaterlevel').innerHTML = advancedwater;  
+       	document.getElementById("researchpoints").innerHTML = researchpoints;
+    };
+    if(advancedwater < 10)
+    {
+    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancedwater)) - (Math.floor(baseCost * Math.pow(1.75,advancedwater)) % 5);
+    }
+    else
+    {
+    	nextCost = "";
+    }
+    document.getElementById('advwatercost').innerHTML = nextCost;
+}
+
+function researchAdvFarming()
+{
+	var upgradeCost = Math.floor(baseCost * Math.pow(1.75,advancedfarming)) - (Math.floor(baseCost * Math.pow(1.75,advancedfarming)) % 5);
+    if(researchpoints >= upgradeCost && advancedfarming < 10){                               
+        advancedfarming = advancedfarming + 1;
+        researchpoints = researchpoints - upgradeCost;
+
+        document.getElementById('advfarminglevel').innerHTML = advancedfarming;  
+       	document.getElementById("researchpoints").innerHTML = researchpoints;
+    };
+    if(advancedfarming < 10)
+    {
+    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancefarming)) - (Math.floor(baseCost * Math.pow(1.75,advancedfarming)) % 5);
+    }
+    else
+    {
+    	nextCost = "";
+    }
+    document.getElementById('advfarmingcost').innerHTML = nextCost;
+}
+
+function researchAdvResearch()
+{
+	var upgradeCost = Math.floor(baseCost * Math.pow(1.75,advancedresearch)) - (Math.floor(baseCost * Math.pow(1.75,advancedresearch)) % 5);
+    if(researchpoints >= upgradeCost && advancedresearch < 10){                               
+        advancedresearch = advancedresearch + 1;
+        researchpoints = researchpoints - upgradeCost;
+
+        document.getElementById('advresearchlevel').innerHTML = advancedresearch;  
+       	document.getElementById("researchpoints").innerHTML = researchpoints;
+    };
+    if(advancedresearch < 10)
+    {
+    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancedresearch)) - (Math.floor(baseCost * Math.pow(1.75,advancedresearch)) % 5);
+    }
+    else
+    {
+    	nextCost = "";
+    }
+    document.getElementById('advresearchcost').innerHTML = nextCost;
+}
+
+function researchAdvEconomy()
+{
+	var upgradeCost = Math.floor(baseCost * Math.pow(1.75,advancedincome)) - (Math.floor(baseCost * Math.pow(1.75,advancedincome)) % 5);
+    if(researchpoints >= upgradeCost && advancedincome < 10){                               
+        advancedincome = advancedincome + 1;
+        researchpoints = researchpoints - upgradeCost;
+
+        document.getElementById('adveconomylevel').innerHTML = advancedincome;  
+       	document.getElementById("researchpoints").innerHTML = researchpoints;
+    };
+    if(advancedincome < 10)
+    {
+    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancedincome)) - (Math.floor(baseCost * Math.pow(1.75,advancedincome)) % 5);
+    }
+    else
+    {
+    	nextCost = "";
+    }
+    document.getElementById('adveconomycost').innerHTML = nextCost;
 }
 
 //Utility functions

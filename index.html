@@ -1,81 +1,204 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<link rel="stylesheet" type="text/css" href="interface.css" />
+  <title>Flotilla</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body style="overflow-x: hidden;">
 
-<div class="resources">
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
+      <a class="navbar-brand" href="#">Flotilla</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">Resources</a></li>
+        <li><a href="#">Research</a></li>
+        <li><a href="#">Ship Construction</a></li> 
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-    <label>Population:</label> <span id="population"></span>
+<div class="page-header">
+	<h1>Resources</h1>
+</div>
 
-    <label>Energy:</label> <span id="energy"></span>
+<div class="container">
 
-    <label>Metals:</label> <span id="metals"></span>
+   <table class="table table-responsive"> 
+	   <tbody>
+	   		<tr><td>Population:</td><td id="population"></td><td><button class="btn btn-default btn-xs" onclick="Recruit()">Recruit</button></td></tr>
+	   		<tr><td>Energy:</td><td id="energy"></td><td></td></tr>
+	   		<tr><td>Metals:</td><td id="metals"></td><td></td></tr>
+	   		<tr><td>Ice:</td><td id="ice"></td><td></td></tr>
+	   		<tr><td>Oxygen:</td><td id="oxygen"></td><td></td></tr>
+	   		<tr><td>Food:</td><td id="food"></td><td></td></tr>
+	   		<tr><td>Water:</td><td id="water"></td><td></td></tr>
+	   		<tr><td>Credits:</td><td id="credits"></td><td></td></tr>
+	   		<tr><td>Research:</td><td id="researchpoints"></td><td></td></tr>
+	   </tbody>
+   </table> 
+</div>
 
-    <label>Ice:</label> <span id="ice"></span>
-
-	<label>Oxygen:</label> <span id="oxygen"></span>
-
-    <label>Food:</label> <span id="food"></span>
+<div class="page-header">
+	<h1>Facilities</h1>
+</div>
 	
-	<label>Water:</label> <span id="water"></span>
-
-	<label>Credits:</label> <span id="credits"></span>
-
-	<label>Research Points:</label> <span id="researchpoints"></span>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="container">
+				 <div class="row">
+	            	<button class="btn btn-default btn-md" onclick="buyMiner()">Buy Miner</button>
+	            </div>
+	            <div class="row">
+			    	<label>Amount:</label> <span id="miners">0</span> 
+			    </div>
+			    <div class="row">
+	            	<label>Cost:</label> <span id="minerCost">15</span>	
+	            </div>
+	           
+	            
+	        </div>
+		</div>
+		<div class="col-sm-4">
+			<div class="container">
+				<div class="row">
+				    <label>Oxygen Generators:</label> <span id="lifesupport">0</span> 
+            	</div>
+			    <div class="row">
+	                <label>Cost:</label> <span id="lsCost">15</span>
+        		</div>
+	            <div class="row">
+	            	<button class="btn btn-default btn-md" onclick="buyLifeSupport()">Buy Oxygen Generator</button>
+	            </div>
+	            
+	        </div>
+		</div>
+		<div class="col-sm-4">
+			<div class="container">
+				<div class="row">
+				    <label>Hydroponics:</label> <span id="hydroponics">0</span> 
+            	</div>
+			    <div class="row">
+	                <label>Cost:</label> <span id="hydroponicsCost">15</span>
+        		</div>
+	            <div class="row">
+	            	<button class="btn btn-default btn-md" onclick="buyHydroponics()">Buy Hydroponics</button>
+	            </div>
+	            
+	        </div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="container">
+				 <div class="row">
+	            	<button class="btn btn-default btn-md" onclick="buyRefinery()">Buy Refinery</button>
+	            </div>
+	            <div class="row">
+			    	<label>Amount:</label> <span id="refineries">0</span> 
+            	</div>
+			    <div class="row">
+	                <label>Cost:</label> <span id="IceRefineryCost">15</span>
+    			</div>
+	           
+	            
+	        </div>
+		</div>
+		<div class="col-sm-4">
+			<div class="container">
+				<div class="row">
+					<label>Research Lab:</label> <span id="labs">0</span> 
+            	</div>
+			    <div class="row">
+	            	<label>Cost:</label> <span id="ResearchLabsCost">100</span>
+    			</div>
+	            <div class="row">
+	            	<button class="btn btn-default btn-md" onclick="buyResearchLab()">Buy Research Lab</button>
+	            </div>
+	            
+	        </div>
+		</div>
+		<div class="col-sm-4">
+			<div class="container">
+				<div class="row">
+					<label>Combat:</label> <span id="combat">0</span> 
+        	    </div>
+			    <div class="row">
+	            	<label>Cost:</label> <span id="combatCost">15</span>
+        		</div>
+	            <div class="row">
+	            	<button class="btn btn-default btn-md" onclick="#">N/A</button>
+	            </div>
+	            
+	        </div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="container">
+				 <div class="row">
+	            	<button class="btn btn-default btn-md" onclick="buyGenerator()">Buy Generator</button>
+	            </div>
+	            <div class="row">
+			    	<label>Amount:</label> <span id="generators">1</span> 
+            	</div>
+			    <div class="row">
+	            	<label>Cost:</label> <span id="genCost">25</span>
+    			</div>
+	           
+	            
+	        </div>
+		</div>
+		<div class="col-sm-4">
+			<div class="container">
+				<div class="row">
+				    <label>Storage:</label> <span id="storage">1</span> 
+            	</div>
+			    <div class="row">
+	    		    <label>Cost:</label> <span id="StorageCost">50</span>
+        		</div>
+	            <div class="row">
+	            	<button class="btn btn-default btn-md" onclick="buyStorage()">Buy Storage</button>
+	            </div>
+	            
+	        </div>
+		</div>
+		<div class="col-sm-4">
+			<div class="container">
+				<div class="row">
+					<label>Crew Quarters:</label> <span id="quarters">1</span> 
+            	</div>
+			    <div class="row">
+	   				<label>Cost:</label> <span id="qsCost">10</span>
+        		</div>
+	            <div class="row">
+	            	<button class="btn btn-default btn-md" onclick="buyCrewQuarters()">Buy Quarters</button>
+	            </div>
+	            
+	        </div>
+		</div>
+	</div>
 </div>
-<div class="upgrades">
-    <div class="leftpanels">
-        <div>
-            <label>Automated Miners:</label> <span id="miners">0</span> 
-            <button onclick="buyMiner()">Buy</button>
-            <label>Cost:</label> <span id="minerCost">15</span>
-        </div>
-        <div>
-            <label>Oxygen Generators:</label> <span id="lifesupport">0</span> 
-            <button onclick="buyLifeSupport()">Buy</button>
-            <label>Cost:</label> <span id="lsCost">15</span>
-        </div>
-        <div>
-            <label>Hydroponics:</label> <span id="hydroponics">0</span> 
-            <button onclick="buyHydroponics()">Buy</button>
-            <label>Cost:</label> <span id="hydroponicsCost">15</span>
-        </div>
-         <div>
-            <label>Ice Refinery:</label> <span id="refineries">0</span> 
-            <button onclick="buyRefinery()">Buy</button>
-            <label>Cost:</label> <span id="IceRefineryCost">15</span>
-        </div>
-        <div>
-            <label>Research Facility:</label> <span id="labs">0</span> 
-            <button onclick="buyResearchLab()">Buy</button>
-            <label>Cost:</label> <span id="ResearchLabsCost">100</span>
-        </div>
-    </div>
-    <div class="rightpanels">
-        <div>
-            <label>Generators:</label> <span id="generators">1</span> 
-            <button onclick="buyGenerator()">Buy</button>
-            <label>Cost:</label> <span id="genCost">25</span>
-        </div>
-	    <div>
-            <label>Storage:</label> <span id="storage">1</span> 
-            <button onclick="buyStorage()">Buy</button>
-            <label>Cost:</label> <span id="StorageCost">50</span>
-        </div>
-   		<div>
-            <label>Crew Quarters:</label> <span id="quarters">1</span> 
-            <button onclick="buyCrewQuarters()">Buy</button> 
-            
-            <label>Cost:</label> <span id="qsCost">10</span>
-        </div>
-        <div>
-            <label>Recruit:</label> <span id=""></span> 
-            <button onclick="Recruit()">Recruit</button>
-            <label>Cost:</label> <span id="RecruitCost">0</span>
-        </div>
-    </div>
-</div>
+   
+
 <script type="text/javascript" src="main.js"></script>	
 </body>
 </html>

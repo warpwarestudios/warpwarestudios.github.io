@@ -8,7 +8,7 @@ var water = 100;
 var ice = 100;
 var metals = 100;
 var date = 0;
-var workers = 0;
+var workers = 4;
 var population = 0;
 var populationmax = 1;
 var storagemax = 100;
@@ -34,10 +34,10 @@ var oxygencost = 0;
 //buildings
 var generators = 1; //increases maximum energy
 var quarters = 1; //housing for crew
-var autominers = 0; //increases resources/second
-var lifesupport = 0; //increases oxygen supplies
-var farms = 0; //increases food supplies
-var refineries = 0; //turns ice into water
+var autominers = 1; //increases resources/second
+var lifesupport = 1; //increases oxygen supplies
+var farms = 1; //increases food supplies
+var refineries = 1; //turns ice into water
 var researchlabs = 0; //research facility for new technology
 var combat = 0; 
 
@@ -54,6 +54,16 @@ function newDay(){
 	foodcost = 0;
 	watercost = 0;
 	oxygencost = 0;
+
+	document.getElementById('quarters').innerHTML = quarters;  
+    document.getElementById('generators').innerHTML = generators;  
+    document.getElementById('miners').innerHTML = autominers;  
+    document.getElementById('lifesupport').innerHTML = lifesupport;  
+    document.getElementById('hydroponics').innerHTML = farms;  
+    document.getElementById('refineries').innerHTML = refineries;  
+    document.getElementById('storage').innerHTML = storage;  
+    document.getElementById('labs').innerHTML = researchlabs; 
+       	
 
 
 	updateEnergy();
@@ -74,7 +84,8 @@ function Recruit()
 		oxygen = oxygen - genCost;
 		food = food - genCost;
 		water = water - genCost;
-		population = population + 1;                                          
+		population = population + 1;
+		updateCrew();                                          
     };
 }
 
@@ -90,6 +101,7 @@ function buyCrewQuarters()
     };
     var nextCost = Math.floor(10 + (quarters/3));
     document.getElementById('qsCost').innerHTML = nextCost;
+    updateCrew();
 }
 
 function buyGenerator(){
@@ -210,8 +222,17 @@ function updateEnergy(){
 	energy = autominers + lifesupport + farms + refineries + researchlabs;
 	energymax = 5 * generators;
 	var energyTotal = energy + "/" + energymax;
-	
+	if(energy == energymax && !document.getElementById("energyrow").className.match(/(?:^|\s)danger(?!\S)/))
+	{
+		addClasstoElement("energyrow","danger")
+	}
+	if(energy != energymax)
+	{
+		replaceAllClassesonElement("energyrow", "")
+	}
 	document.getElementById("energy").innerHTML = energyTotal;
+	
+	
 }
 function updateMaterials(){
 	var random;
@@ -273,6 +294,19 @@ function updateMaterials(){
 	//put ice in the html
 	var iceTotal = ice + "/" + storagemax + " (+" + icebonus + ")"+ " (-" + icecost + ")";
 	document.getElementById("ice").innerHTML = iceTotal;
+
+	if(icebonus > icecost && !document.getElementById("icerow").className.match(/(?:^|\s)success(?!\S)/))
+	{
+		replaceAllClassesonElement("icerow","success")
+	}
+	else if(icebonus < icecost && !document.getElementById("icerow").className.match(/(?:^|\s)danger(?!\S)/))
+	{
+		replaceAllClassesonElement("icerow", "danger")
+	}
+	else if (icebonus == icecost)
+	{
+		replaceAllClassesonElement("icerow", "")	
+	}
 }
 
 function updateOxygen(){
@@ -295,6 +329,19 @@ function updateOxygen(){
 	var oxygenTotal = oxygen + "/" + storagemax + " (+" + oxygenbonus + ")"+ " (-" + oxygencost + ")";
 	
 	document.getElementById("oxygen").innerHTML = oxygenTotal;
+
+	if(oxygenbonus > oxygencost && !document.getElementById("oxygenrow").className.match(/(?:^|\s)success(?!\S)/))
+	{
+		replaceAllClassesonElement("oxygenrow","success");
+	}
+	else if(oxygenbonus < oxygencost && !document.getElementById("oxygenrow").className.match(/(?:^|\s)danger(?!\S)/))
+	{
+		replaceAllClassesonElement("oxygenrow", "danger");
+	}
+	else if (oxygenbonus == oxygencost)
+	{
+		replaceAllClassesonElement("oxygenrow", "");	
+	}
 }
 
 function updateFood(){
@@ -317,6 +364,19 @@ function updateFood(){
 	var foodTotal = food + "/" + storagemax  + " (+" + foodbonus + ")"+ " (-" + foodcost + ")";
 	
 	document.getElementById("food").innerHTML = foodTotal;
+
+	if(foodbonus > foodcost && !document.getElementById("foodrow").className.match(/(?:^|\s)success(?!\S)/))
+	{
+		replaceAllClassesonElement("foodrow","success");
+	}
+	else if(foodbonus < foodcost && !document.getElementById("foodrow").className.match(/(?:^|\s)danger(?!\S)/))
+	{
+		replaceAllClassesonElement("foodrow", "danger");
+	}
+	else if (foodbonus == foodcost)
+	{
+		replaceAllClassesonElement("foodrow", "");	
+	}
 }
 
 function updateWater(){
@@ -338,6 +398,19 @@ function updateWater(){
 	var waterTotal = water + "/" + storagemax  + " (+"+ waterbonus + ")"+ " (-" + watercost + ")";
 	
 	document.getElementById("water").innerHTML = waterTotal;
+
+	if(waterbonus > watercost && !document.getElementById("waterrow").className.match(/(?:^|\s)success(?!\S)/))
+	{
+		replaceAllClassesonElement("waterrow","success");
+	}
+	else if(waterbonus < watercost && !document.getElementById("waterrow").className.match(/(?:^|\s)danger(?!\S)/))
+	{
+		replaceAllClassesonElement("waterrow", "danger");
+	}
+	else if (waterbonus == watercost)
+	{
+		replaceAllClassesonElement("waterrow", "");	
+	}
 }
 
 
@@ -414,11 +487,21 @@ function updateCrew(){
 
 	var popTotal = workers + "/" + population + "/" + populationmax;
 	
-	var taxes = workers + population;
-	creditsbonus = creditsbonus + taxes;
+	var taxablePop = workers + population;
+	creditsbonus = creditsbonus + taxablePop;
 	//add tax to current credits
-	credits = credits + taxes;
+	credits = credits + taxablePop;
 	var creditsTotal = credits + " (+" + creditsbonus + ")";
+
+	if(taxablePop == populationmax && !document.getElementById("populationrow").className.match(/(?:^|\s)danger(?!\S)/))
+	{
+		addClasstoElement("populationrow","danger")
+	}
+	if( taxablePop != populationmax)
+	{
+		replaceAllClassesonElement("populationrow", "")
+	}
+
 	document.getElementById("population").innerHTML = popTotal;
 	document.getElementById("credits").innerHTML = creditsTotal;
 
@@ -433,4 +516,24 @@ function updateResearch(){
 	document.getElementById("researchpoints").innerHTML = researchTotal;
 }
 
+//Utility functions
+
+function addClasstoElement(id,myClass)
+{
+	document.getElementById(id).className += myClass
+
+}
+
+function removeClassfromElement(id,myClass)
+{
+	document.getElementById(id).className = 
+	document.getElementById(id).className.replace
+      ( /(?:^|\s)myClass(?!\S)/g , '' )
+}
+function replaceAllClassesonElement(id,myClass)
+{
+	document.getElementById(id).className = myClass;
+}
+
+//game loop
 window.setInterval(function(){newDay();}, 1000);

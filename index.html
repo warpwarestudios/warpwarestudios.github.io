@@ -43,15 +43,15 @@
 
    <table class="table table-responsive"> 
 	   <tbody>
-	   		<tr><td>Population:</td><td id="population"></td><td><button class="btn btn-default btn-xs" onclick="Recruit()">Recruit</button></td></tr>
-	   		<tr><td>Energy:</td><td id="energy"></td><td></td></tr>
-	   		<tr><td>Metals:</td><td id="metals"></td><td></td></tr>
-	   		<tr><td>Ice:</td><td id="ice"></td><td></td></tr>
-	   		<tr><td>Oxygen:</td><td id="oxygen"></td><td></td></tr>
-	   		<tr><td>Food:</td><td id="food"></td><td></td></tr>
-	   		<tr><td>Water:</td><td id="water"></td><td></td></tr>
-	   		<tr><td>Credits:</td><td id="credits"></td><td></td></tr>
-	   		<tr><td>Research:</td><td id="researchpoints"></td><td></td></tr>
+	   		<tr id="populationrow"><td>Population:</td><td><span id="population" data-toggle="tooltip" data-placement="right" title="Workers/Free/Maximum"></span></td><td><button class="btn btn-default btn-xs glyphicon glyphicon-user" onclick="Recruit()"> Recruit</button></td></tr>
+	   		<tr id="energyrow"><td>Energy:</td><td id="energy"></td><td></td></tr>
+	   		<tr id="metalsrow"><td>Metals:</td><td id="metals"></td><td></td></tr>
+	   		<tr id="icerow"><td>Ice:</td><td id="ice"></td><td></td></tr>
+	   		<tr id="oxygenrow"><td>Oxygen:</td><td id="oxygen"></td><td></td></tr>
+	   		<tr id="foodrow"><td>Food:</td><td id="food"></td><td></td></tr>
+	   		<tr id="waterrow"><td>Water:</td><td id="water"></td><td></td></tr>
+	   		<tr id="creditsrow"><td>Credits:</td><td id="credits"></td><td></td></tr>
+	   		<tr id="researchrow"><td>Research:</td><td id="researchpoints"></td><td></td></tr>
 	   </tbody>
    </table> 
 </div>
@@ -63,142 +63,55 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-4">
-			<div class="container">
-				 <div class="row">
-	            	<button class="btn btn-default btn-md" onclick="buyMiner()">Buy Miner</button>
-	            </div>
-	            <div class="row">
-			    	<label>Amount:</label> <span id="miners">0</span> 
-			    </div>
-			    <div class="row">
-	            	<label>Cost:</label> <span id="minerCost">15</span>	
-	            </div>
-	           
-	            
-	        </div>
-		</div>
-		<div class="col-sm-4">
-			<div class="container">
-				<div class="row">
-				    <label>Oxygen Generators:</label> <span id="lifesupport">0</span> 
-            	</div>
-			    <div class="row">
-	                <label>Cost:</label> <span id="lsCost">15</span>
-        		</div>
-	            <div class="row">
-	            	<button class="btn btn-default btn-md" onclick="buyLifeSupport()">Buy Oxygen Generator</button>
-	            </div>
-	            
-	        </div>
-		</div>
-		<div class="col-sm-4">
-			<div class="container">
-				<div class="row">
-				    <label>Hydroponics:</label> <span id="hydroponics">0</span> 
-            	</div>
-			    <div class="row">
-	                <label>Cost:</label> <span id="hydroponicsCost">15</span>
-        		</div>
-	            <div class="row">
-	            	<button class="btn btn-default btn-md" onclick="buyHydroponics()">Buy Hydroponics</button>
-	            </div>
-	            
-	        </div>
-		</div>
+			<button class="btn btn-default btn-sm" onclick="buyMiner()">Buy Automated Miner <span class="badge"id="miners">0</span></button>
+	        <span class="badge" id="minerCost" data-toggle="tooltip" data-placement="top" title="Cost">15</span>
+	    </div>
+	    <div class="col-sm-4">
+			<button class="btn btn-default btn-sm" onclick="buyLifeSupport()">Buy Oxygen Generator <span class="badge"id="lifesupport">0</span></button>
+	        <span class="badge" id="lsCost">15</span>
+	    </div>
+	    <div class="col-sm-4">
+			<button class="btn btn-default btn-sm" onclick="buyHydroponics()">Buy Hydroponic Farm <span class="badge"id="hydroponics">0</span></button>
+	        <span class="badge" id="hydroponicsCost">15</span>
+	    </div>
 	</div>
 	<div class="row">
 		<div class="col-sm-4">
-			<div class="container">
-				 <div class="row">
-	            	<button class="btn btn-default btn-md" onclick="buyRefinery()">Buy Refinery</button>
-	            </div>
-	            <div class="row">
-			    	<label>Amount:</label> <span id="refineries">0</span> 
-            	</div>
-			    <div class="row">
-	                <label>Cost:</label> <span id="IceRefineryCost">15</span>
-    			</div>
-	           
-	            
-	        </div>
-		</div>
-		<div class="col-sm-4">
-			<div class="container">
-				<div class="row">
-					<label>Research Lab:</label> <span id="labs">0</span> 
-            	</div>
-			    <div class="row">
-	            	<label>Cost:</label> <span id="ResearchLabsCost">100</span>
-    			</div>
-	            <div class="row">
-	            	<button class="btn btn-default btn-md" onclick="buyResearchLab()">Buy Research Lab</button>
-	            </div>
-	            
-	        </div>
-		</div>
-		<div class="col-sm-4">
-			<div class="container">
-				<div class="row">
-					<label>Combat:</label> <span id="combat">0</span> 
-        	    </div>
-			    <div class="row">
-	            	<label>Cost:</label> <span id="combatCost">15</span>
-        		</div>
-	            <div class="row">
-	            	<button class="btn btn-default btn-md" onclick="#">N/A</button>
-	            </div>
-	            
-	        </div>
-		</div>
+			<button class="btn btn-default btn-sm" onclick="buyRefinery()">Buy Ice Refinery <span class="badge"id="refineries">0</span></button>
+	        <span class="label label-default">Cost: <span id="IceRefineryCost">15</span></span>
+	    </div>
+	    <div class="col-sm-4">
+			<button class="btn btn-default btn-sm" onclick="buyResearchLab()">Buy Research Lab <span class="badge"id="labs">0</span></button>
+	        <span class="label label-default">Cost: <span id="ResearchLabsCost">100</span></span>
+	    </div>
+	    <div class="col-sm-4">
+			<button class="btn btn-default btn-sm" onclick="#">Buy Combat <span class="badge"id="combat">0</span></button>
+	        <span class="label label-default">Cost: <span id="combatCost">15</span></span>
+	    </div>
 	</div>
 	<div class="row">
 		<div class="col-sm-4">
-			<div class="container">
-				 <div class="row">
-	            	<button class="btn btn-default btn-md" onclick="buyGenerator()">Buy Generator</button>
-	            </div>
-	            <div class="row">
-			    	<label>Amount:</label> <span id="generators">1</span> 
-            	</div>
-			    <div class="row">
-	            	<label>Cost:</label> <span id="genCost">25</span>
-    			</div>
-	           
-	            
-	        </div>
-		</div>
-		<div class="col-sm-4">
-			<div class="container">
-				<div class="row">
-				    <label>Storage:</label> <span id="storage">1</span> 
-            	</div>
-			    <div class="row">
-	    		    <label>Cost:</label> <span id="StorageCost">50</span>
-        		</div>
-	            <div class="row">
-	            	<button class="btn btn-default btn-md" onclick="buyStorage()">Buy Storage</button>
-	            </div>
-	            
-	        </div>
-		</div>
-		<div class="col-sm-4">
-			<div class="container">
-				<div class="row">
-					<label>Crew Quarters:</label> <span id="quarters">1</span> 
-            	</div>
-			    <div class="row">
-	   				<label>Cost:</label> <span id="qsCost">10</span>
-        		</div>
-	            <div class="row">
-	            	<button class="btn btn-default btn-md" onclick="buyCrewQuarters()">Buy Quarters</button>
-	            </div>
-	            
-	        </div>
-		</div>
+			<button class="btn btn-default btn-sm" onclick="buyGenerator()">Buy Generator <span class="badge" id="generators">1</span></button>
+	        <span class="label label-default">Cost: <span id="genCost">25</span></span>
+	    </div>
+	    <div class="col-sm-4">
+			<button class="btn btn-default btn-sm" onclick="buyStorage()">Buy Storage <span class="badge" id="storage">0</span></button>
+	        <span class="label label-default">Cost: <span id="StorageCost">50</span></span>
+	    </div>
+	    <div class="col-sm-4">
+			<button class="btn btn-default btn-sm" onclick="buyCrewQuarters()">Buy Crew Quarters <span class="badge"id="quarters">1</span></button>
+	        <span class="label label-default">Cost: <span id="qsCost">15</span></span>
+	    </div>
 	</div>
+		
 </div>
    
 
 <script type="text/javascript" src="main.js"></script>	
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+</script>
 </body>
 </html>

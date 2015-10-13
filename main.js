@@ -11,12 +11,10 @@ var date = 0;
 var workers = 4;
 var population = 0;
 var populationmax = 1;
-var storagemax = 100;
+var storageamt = 50; // amount of storage per storage build
+var storageamttotal = 0;
 var credits = 0;
 var researchpoints = 0;
-
-//storage
-var storage = 1;
 
 //calculate bonuses
 var oxygenbonus = 0;
@@ -39,7 +37,20 @@ var lifesupport = 1; //increases oxygen supplies
 var farms = 1; //increases food supplies
 var refineries = 1; //turns ice into water
 var researchlabs = 0; //research facility for new technology
-var combat = 0; 
+var combat = 0;
+var storage = 1; 
+
+//maximum allowed of each building
+var generatorsmax = 1000; //increases maximum energy
+var quartersmax = 900; //housing for crew
+var autominersmax = 650; //increases resources/second
+var lifesupportmax = 650; //increases oxygen supplies
+var farmsmax = 650; //increases food supplies
+var refineriesmax = 650; //turns ice into water
+var researchlabsmax = 500; //research facility for new technology
+var combatmax = 500; 
+var storagemax = 500;
+
 
 //research levels
 var baseCost = 100;
@@ -64,14 +75,15 @@ function newDay(){
 	watercost = 0;
 	oxygencost = 0;
 
-	document.getElementById('quarters').innerHTML = quarters;  
-    document.getElementById('generators').innerHTML = generators;  
-    document.getElementById('miners').innerHTML = autominers;  
-    document.getElementById('lifesupport').innerHTML = lifesupport;  
-    document.getElementById('hydroponics').innerHTML = farms;  
-    document.getElementById('refineries').innerHTML = refineries;  
-    document.getElementById('storage').innerHTML = storage;  
-    document.getElementById('labs').innerHTML = researchlabs; 
+	document.getElementById('quarters').innerHTML = quarters + "/" + quartersmax;  
+    document.getElementById('generators').innerHTML = generators + "/" + generatorsmax;  
+    document.getElementById('miners').innerHTML = autominers + "/" + autominersmax;  
+    document.getElementById('lifesupport').innerHTML = lifesupport + "/" + lifesupportmax;  
+    document.getElementById('hydroponics').innerHTML = farms + "/" + farmsmax;  
+    document.getElementById('refineries').innerHTML = refineries + "/" + refineriesmax;  
+    document.getElementById('storage').innerHTML = storage + "/" + storagemax;  
+    document.getElementById('labs').innerHTML = researchlabs + "/" + researchlabsmax; 
+    document.getElementById('combat').innerHTML = combat + "/" + combatmax; 
        	
 
 
@@ -100,12 +112,12 @@ function Recruit()
 
 function buyCrewQuarters()
 {
-	var genCost = Math.floor(10 + (quarters/3));
-    if(metals >= genCost){                               
+	var qCost = Math.floor(10 + (quarters/3));
+    if(metals >= qCost && quarters < quartersmax){                               
         quarters = quarters + 1;                                   
-    	metals = metals - genCost;                        
-        document.getElementById('quarters').innerHTML = quarters;  
-       	var metalsTotal = metals + "/" + storagemax;
+    	metals = metals - qCost;                        
+        document.getElementById('quarters').innerHTML = quarters + "/" + quartersmax;  
+       	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
     var nextCost = Math.floor(10 + (quarters/3));
@@ -115,11 +127,11 @@ function buyCrewQuarters()
 
 function buyGenerator(){
     var genCost = 25;
-    if(metals >= genCost){                               
+    if(metals >= genCost && generators < generatorsmax){                               
         generators = generators + 1;                                   
     	metals = metals - genCost;                        
-        document.getElementById('generators').innerHTML = generators;  
-       	var metalsTotal = metals + "/" + storagemax;
+        document.getElementById('generators').innerHTML = generators + "/" + generatorsmax;  
+    	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
     var nextCost = 25;
@@ -130,13 +142,13 @@ function buyMiner(){
 	updateEnergy(); //calculate current energy
 	updateCrew(); // calculate current crew
     var minerCost = Math.floor(15 + (autominers/3));
-    if(metals >= minerCost && energy < energymax && population > 0){
+    if(metals >= minerCost && energy < energymax && population > 0 && autominers < autominersmax){
     	population = population - 1; 
     	workers = workers + 1;                               
         autominers = autominers + 1;                                   
     	metals = metals - minerCost;                        
-        document.getElementById('miners').innerHTML = autominers;  
-       	var metalsTotal = metals + "/" + storagemax;
+        document.getElementById('miners').innerHTML = autominers + "/" + autominersmax;  
+    	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
     var nextCost = Math.floor(15 + (autominers/3));
@@ -147,13 +159,13 @@ function buyLifeSupport(){
 	updateEnergy(); //calculate current energy
 	updateCrew(); // calculate current crew
     var lsCost = Math.floor(15 + (lifesupport/3));
-    if(metals >= lsCost && energy < energymax && population > 0){                               
+    if(metals >= lsCost && energy < energymax && population > 0 && lifesupport < lifesupportmax){                               
         population = population - 1; 
     	workers = workers + 1;                               
         lifesupport = lifesupport + 1;                                   
     	metals = metals - lsCost;                        
-        document.getElementById('lifesupport').innerHTML = lifesupport;  
-       	var metalsTotal = metals + "/" + storagemax;
+        document.getElementById('lifesupport').innerHTML = lifesupport + "/" + lifesupportmax;  
+    	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
     var nextCost = Math.floor(15 + (lifesupport/3));
@@ -164,13 +176,13 @@ function buyHydroponics(){
 	updateEnergy(); //calculate current energy
 	updateCrew(); // calculate current crew
     var farmCost = Math.floor(15 + (farms/3));
-    if(metals >= farmCost && energy < energymax && population > 0){                               
+    if(metals >= farmCost && energy < energymax && population > 0 && farms < farmsmax){                               
         population = population - 1; 
     	workers = workers + 1;                               
         farms = farms + 1;                                   
     	metals = metals - farmCost;                        
-        document.getElementById('hydroponics').innerHTML = farms;  
-       	var metalsTotal = metals + "/" + storagemax;
+        document.getElementById('hydroponics').innerHTML = farms + "/" + farmsmax;  
+    	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
     var nextCost = Math.floor(15 + (farms/3));
@@ -181,13 +193,13 @@ function buyRefinery(){
 	updateEnergy(); //calculate current energy
 	updateCrew(); // calculate current crew
     var refCost = Math.floor(15 + (refineries/3));
-    if(metals >= refCost && energy < energymax && population > 0){                               
+    if(metals >= refCost && energy < energymax && population > 0 && refineries < refineriesmax){                               
         population = population - 1; 
     	workers = workers + 1;                               
         refineries = refineries + 1;                                   
     	metals = metals - refCost;                        
-        document.getElementById('refineries').innerHTML = refineries;  
-       	var metalsTotal = metals + "/" + storagemax;
+        document.getElementById('refineries').innerHTML = refineries + "/" + refineriesmax;  
+    	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
     var nextCost = Math.floor(15 + (refineries/3));
@@ -198,12 +210,12 @@ function buyStorage(){
 	updateEnergy(); //calculate current energy
 	updateCrew(); // calculate current crew
     var mStoreCost = 50;
-    if(metals >= mStoreCost){                               
+    if(metals >= mStoreCost && storage < storagemax){                               
         storage = storage + 1;                                   
     	metals = metals - mStoreCost;                        
-        storagemax = storage * 50;
-		document.getElementById('storage').innerHTML = storage;  
-       	var metalsTotal = metals + "/" + storagemax;
+        storageamttotal = storage * storageamt;
+		document.getElementById('storage').innerHTML = storage + "/" + storagemax;  
+    	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
     var nextCost = 50;
@@ -214,13 +226,13 @@ function buyResearchLab(){
 	updateEnergy(); //calculate current energy
 	updateCrew(); // calculate current crew
     var labCost = 100;
-    if(metals >= labCost && energy < energymax && population > 0){                               
+    if(metals >= labCost && energy < energymax && population > 0 && researchlabs < researchlabsmax){                               
         population = population - 1; 
     	workers = workers + 1;                               
         researchlabs = researchlabs + 1;                                   
     	metals = metals - labCost;                        
-        document.getElementById('labs').innerHTML = researchlabs;  
-       	var metalsTotal = metals + "/" + storagemax;
+        document.getElementById('labs').innerHTML = researchlabs + "/" + researchlabsmax; 
+    	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
     var nextCost = 100;
@@ -250,17 +262,17 @@ function updateMaterials(){
 	icebonus = 0;
 
 	//calculate maximum storage
-	storagemax = storage * 50;
+	storageamttotal = storage * storageamt;
 
 	//for each automated miner generate either ice or metal
 	//if max, only generate the other one, because your miners
 	//are intelligent
-	if(metals == storagemax)
+	if(metals == storageamttotal)
 	{
 		ice = ice + Math.floor(autominers * (1 + (0.05 * advancedmining)));
 		icebonus = icebonus + Math.floor(autominers * (1 + (0.05 * advancedmining)));
 	}
-	else if (ice == storagemax || ice == storagemax - icecost)
+	else if (ice == storageamttotal || ice == storageamttotal - icecost)
 	{
 		//put ice equal to cost into ice
 		ice = ice + Math.floor(icecost * (1 + (0.05 * advancedmining)));
@@ -292,145 +304,173 @@ function updateMaterials(){
 	}
 	
 	//check maximum and minimum
-	if(metals > storagemax)
+	if(metals > storageamttotal)
 	{
-		metals = storagemax;
+		metals = storageamttotal;
 	}
 	if(metals < 0)
 	{
 		metals = 0;
 	}
-	if(ice > storagemax)
+	if(ice > storageamttotal)
 	{
-		ice = storagemax;
+		ice = storageamttotal;
 	}
 	if(ice < 0)
 	{
 		ice = 0;
 	}
 	//put metals in the html
-	var metalsTotal = metals + "/" + storagemax + " (+" + metalsbonus + ")";
+	var metalsTotal = metals + "/" + storageamttotal + " (+" + metalsbonus + ")";
 	document.getElementById("metals").innerHTML = metalsTotal;
 	//put ice in the html
-	var iceTotal = ice + "/" + storagemax + " (+" + icebonus + ")"+ " (-" + icecost + ")";
+	var bonustotal = icebonus - icecost;
+
+	var iceTotal;
 	document.getElementById("ice").innerHTML = iceTotal;
 
-	if(icebonus > icecost && !document.getElementById("icerow").className.match(/(?:^|\s)success(?!\S)/))
+	if(icebonus > icecost)
 	{
 		replaceAllClassesonElement("icerow","success")
+		iceTotal = ice + "/" + storageamttotal + " (+" + bonustotal + ")";
+		document.getElementById("ice").innerHTML = iceTotal;
 	}
-	else if(icebonus < icecost && !document.getElementById("icerow").className.match(/(?:^|\s)danger(?!\S)/))
+	else if(icebonus < icecost)
 	{
 		replaceAllClassesonElement("icerow", "danger")
+		iceTotal = ice + "/" + storageamttotal + " (" + bonustotal + ")";
+		document.getElementById("ice").innerHTML = iceTotal;
 	}
 	else if (icebonus == icecost)
 	{
 		replaceAllClassesonElement("icerow", "")	
+		iceTotal = ice + "/" + storageamttotal + " (+" + bonustotal + ")";
+		document.getElementById("ice").innerHTML = iceTotal;
+	}
+	else
+	{
+		replaceAllClassesonElement("icerow", "")	
+		iceTotal = ice + "/" + storageamttotal;
+		document.getElementById("ice").innerHTML = iceTotal;
 	}
 }
 
 function updateOxygen(){
 	oxygen = oxygen - (population + workers);
 	oxygencost = oxygencost + population + workers;
-	storagemax = storage * 50;
+	storageamttotal = storage * storageamt;
 	
-	if(oxygen < storagemax)
+	if(oxygen < storageamttotal)
 	{
 		generateOxygen();
 	}
-	if(oxygen > storagemax)
+	if(oxygen > storageamttotal)
 	{
-		oxygen = storagemax;
+		oxygen = storageamttotal;
 	}
 	if (oxygen < 0)
 	{
 		oxygen = 0;
 	}		
-	var oxygenTotal = oxygen + "/" + storagemax + " (+" + oxygenbonus + ")"+ " (-" + oxygencost + ")";
+	var oxygenTotal;
 	
-	document.getElementById("oxygen").innerHTML = oxygenTotal;
-
-	if(oxygenbonus > oxygencost && !document.getElementById("oxygenrow").className.match(/(?:^|\s)success(?!\S)/))
+	var bonustotal = oxygenbonus - oxygencost;
+	
+	if(oxygenbonus > oxygencost)
 	{
 		replaceAllClassesonElement("oxygenrow","success");
+	    oxygenTotal = oxygen + "/" + storageamttotal + " (+" + bonustotal + ")";
 	}
-	else if(oxygenbonus < oxygencost && !document.getElementById("oxygenrow").className.match(/(?:^|\s)danger(?!\S)/))
+	else if(oxygenbonus < oxygencost)
 	{
 		replaceAllClassesonElement("oxygenrow", "danger");
+		var oxygenTotal = oxygen + "/" + storageamttotal + " (" + bonustotal + ")";
 	}
 	else if (oxygenbonus == oxygencost)
 	{
 		replaceAllClassesonElement("oxygenrow", "");	
+	    oxygenTotal = oxygen + "/" + storageamttotal + " (+" + bonustotal + ")";
 	}
+
+	document.getElementById("oxygen").innerHTML = oxygenTotal;
+	
 }
 
 function updateFood(){
 	
 	food = food - (population + workers);
 	foodcost = foodcost + population + workers;
-	storagemax = storage * 50;
-	if(food < storagemax)
+	storageamttotal = storage * storageamt;
+	if(food < storageamttotal)
 	{
 		generateFood();
 	}
-	if(food > storagemax)
+	if(food > storageamttotal)
 	{
-		food = storagemax;
+		food = storageamttotal;
 	}
 	if(food < 0)
 	{
 		food = 0;
 	}		
-	var foodTotal = food + "/" + storagemax  + " (+" + foodbonus + ")"+ " (-" + foodcost + ")";
+	var foodTotal;
+	var bonustotal = foodbonus - foodcost
 	
-	document.getElementById("food").innerHTML = foodTotal;
-
-	if(foodbonus > foodcost && !document.getElementById("foodrow").className.match(/(?:^|\s)success(?!\S)/))
+	if(foodbonus > foodcost)
 	{
 		replaceAllClassesonElement("foodrow","success");
+		foodTotal = food + "/" + storageamttotal  + " (+" + bonustotal + ")";
 	}
-	else if(foodbonus < foodcost && !document.getElementById("foodrow").className.match(/(?:^|\s)danger(?!\S)/))
+	else if(foodbonus < foodcost)
 	{
 		replaceAllClassesonElement("foodrow", "danger");
+		foodTotal = food + "/" + storageamttotal  + " (" + bonustotal + ")";
 	}
 	else if (foodbonus == foodcost)
 	{
 		replaceAllClassesonElement("foodrow", "");	
+		foodTotal = food + "/" + storageamttotal  + " (+" + bonustotal + ")";
 	}
+
+	document.getElementById("food").innerHTML = foodTotal;
 }
 
 function updateWater(){
 	water = water - (population + workers);
 	watercost = watercost + population + workers;
-	storagemax = storage * 50;
-	if(water < storagemax)
+	storageamttotal = storage * storageamt;
+	if(water < storageamttotal)
 	{
 		generateWater();
 	}
-	if(water > storagemax)
+	if(water > storageamttotal)
 	{
-		water = storagemax;
+		water = storageamttotal;
 	}
 	if (water < 0)
 	{
 		water = 0;
 	}		
-	var waterTotal = water + "/" + storagemax  + " (+"+ waterbonus + ")"+ " (-" + watercost + ")";
+	var waterTotal;
+	var bonustotal = waterbonus - watercost;
 	
-	document.getElementById("water").innerHTML = waterTotal;
-
-	if(waterbonus > watercost && !document.getElementById("waterrow").className.match(/(?:^|\s)success(?!\S)/))
+	if(waterbonus > watercost)
 	{
 		replaceAllClassesonElement("waterrow","success");
+		waterTotal = water + "/" + storageamttotal  + " (+"+ bonustotal + ")";
 	}
-	else if(waterbonus < watercost && !document.getElementById("waterrow").className.match(/(?:^|\s)danger(?!\S)/))
+	else if(waterbonus < watercost)
 	{
 		replaceAllClassesonElement("waterrow", "danger");
+		waterTotal = water + "/" + storageamttotal  + " ("+ bonustotal + ")";
 	}
 	else if (waterbonus == watercost)
 	{
 		replaceAllClassesonElement("waterrow", "");	
+		waterTotal = water + "/" + storageamttotal  + " (+"+ bonustotal + ")";
 	}
+
+	document.getElementById("water").innerHTML = waterTotal;
 }
 
 

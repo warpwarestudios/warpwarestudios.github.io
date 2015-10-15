@@ -1,14 +1,14 @@
 //holding variables
 var energy = 0;
 var energymax = 0;
-var oxygen = 100;
-var materials = 100;
-var food = 100;
-var water = 100;
-var ice = 100;
-var metals = 100;
+var oxygen = 50000;
+var materials = 50000;
+var food = 50000;
+var water = 50000;
+var ice = 50000;
+var metals = 50000;
 var date = 0;
-var workers = 4;
+var workers = 3100;
 var population = 0;
 var populationmax = 1;
 var storageamt = 50; // amount of storage per storage build
@@ -30,15 +30,15 @@ var watercost = 0;
 var oxygencost = 0;
 
 //buildings
-var generators = 1; //increases maximum energy
-var quarters = 1; //housing for crew
-var autominers = 1; //increases resources/second
-var lifesupport = 1; //increases oxygen supplies
-var farms = 1; //increases food supplies
-var refineries = 1; //turns ice into water
-var researchlabs = 0; //research facility for new technology
+var generators = 1000; //increases maximum energy
+var quarters = 900; //housing for crew
+var autominers = 650; //increases resources/second
+var lifesupport = 650; //increases oxygen supplies
+var farms = 650; //increases food supplies
+var refineries = 650; //turns ice into water
+var researchlabs = 500; //research facility for new technology
 var combat = 0;
-var storage = 1; 
+var storage = 500; 
 
 //maximum allowed of each building
 var generatorsmax = 1000; //increases maximum energy
@@ -84,8 +84,11 @@ function newDay(){
     document.getElementById('storage').innerHTML = storage + "/" + storagemax;  
     document.getElementById('labs').innerHTML = researchlabs + "/" + researchlabsmax; 
     document.getElementById('combat').innerHTML = combat + "/" + combatmax; 
-       	
-
+    
+    var recruitCost = Math.floor(1 * Math.pow(1.01,(population + workers)));
+    	
+	document.getElementById('recruitCost').setAttribute("title", "Oxygen: "  + recruitCost + " Food: " + recruitCost + " Water: " + recruitCost + " Credits: " + recruitCost);
+    
 
 	updateEnergy();
 	updateOxygen();
@@ -99,15 +102,20 @@ function newDay(){
 
 function Recruit()
 {
-	var genCost = 1;
-    if(oxygen >= genCost && water >= genCost && food >= genCost && population + workers < populationmax){                               
+	var recruitCost = Math.floor(1 * Math.pow(1.01,(population + workers)));
+    if(oxygen >= recruitCost && water >= recruitCost && food >= recruitCost && credits >= recruitCost && population + workers < populationmax){                               
 		
-		oxygen = oxygen - genCost;
-		food = food - genCost;
-		water = water - genCost;
+		oxygen = oxygen - recruitCost;
+		food = food - recruitCost;
+		water = water - recruitCost;
+		credits = credits - recruitCost;
 		population = population + 1;
 		updateCrew();                                          
     };
+    var nextCost = Math.floor(1 * Math.pow(1.01,(population + workers)));
+    document.getElementById('recruitCost').setAttribute("title", "Oxygen: "  + nextCost + " Food: " + nextCost + " Water: " + nextCost + " Credits: " + nextCost);
+    updateCrew();                                          
+    
 }
 
 function buyCrewQuarters()
@@ -274,12 +282,13 @@ function updateMaterials(){
 	}
 	else if (ice == storageamttotal || ice == storageamttotal - icecost)
 	{
+		totalminers = Math.floor(autominers * (1 + (0.05 * advancedmining)));
 		//put ice equal to cost into ice
-		ice = ice + Math.floor(icecost * (1 + (0.05 * advancedmining)));
-		icebonus = Math.floor(icecost * (1 + (0.05 * advancedmining)));
+		ice = ice + icecost;
+		icebonus = icecost;
 		//put the rest into metals
-		metals = metals + Math.floor((autominers - icecost) * (1 + (0.05 * advancedmining)));
-		metalsbonus = metalsbonus + Math.floor((autominers - icecost) * (1 + (0.05 * advancedmining)));
+		metals = metals + totalminers - icecost;
+		metalsbonus = metalsbonus + totalminers - icecost;
 	}
 	else
 	{
@@ -652,7 +661,7 @@ function researchAdvFarming()
     };
     if(advancedfarming < 10)
     {
-    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancefarming)) - (Math.floor(baseCost * Math.pow(1.75,advancedfarming)) % 5);
+    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancedfarming)) - (Math.floor(baseCost * Math.pow(1.75,advancedfarming)) % 5);
     }
     else
     {

@@ -8,7 +8,7 @@ var water = 50000;
 var ice = 50000;
 var metals = 50000;
 var date = 0;
-var workers = 3100;
+var workers = 4;
 var population = 0;
 var populationmax = 1;
 var storageamt = 50; // amount of storage per storage build
@@ -30,15 +30,15 @@ var watercost = 0;
 var oxygencost = 0;
 
 //buildings
-var generators = 1000; //increases maximum energy
-var quarters = 900; //housing for crew
-var autominers = 650; //increases resources/second
-var lifesupport = 650; //increases oxygen supplies
-var farms = 650; //increases food supplies
-var refineries = 650; //turns ice into water
-var researchlabs = 500; //research facility for new technology
+var generators = 1; //increases maximum energy
+var quarters = 1; //housing for crew
+var autominers = 1; //increases resources/second
+var lifesupport = 1; //increases oxygen supplies
+var farms = 1; //increases food supplies
+var refineries = 1; //turns ice into water
+var researchlabs = 0; //research facility for new technology
 var combat = 0;
-var storage = 500; 
+var storage = 1; 
 
 //maximum allowed of each building
 var generatorsmax = 1000; //increases maximum energy
@@ -53,7 +53,7 @@ var storagemax = 500;
 
 
 //research levels
-var baseCost = 100;
+var baseResearchCost = 100;
 var advancedmining = 0;
 var advancedoxygen = 0;
 var advancedwater = 0;
@@ -85,10 +85,17 @@ function newDay(){
     document.getElementById('labs').innerHTML = researchlabs + "/" + researchlabsmax; 
     document.getElementById('combat').innerHTML = combat + "/" + combatmax; 
     
-    var recruitCost = Math.floor(1 * Math.pow(1.01,(population + workers)));
-    	
-	document.getElementById('recruitCost').setAttribute("title", "Oxygen: "  + recruitCost + " Food: " + recruitCost + " Water: " + recruitCost + " Credits: " + recruitCost);
     
+    //calculate costs every update
+	buyCrewQuarters(0);
+	buyResearchLab(0);
+	buyGenerator(0);
+	buyMiner(0);
+	buyHydroponics(0);
+	buyRefinery(0);
+	buyStorage(0);
+	buyLifeSupport(0);
+	Recruit(0);
 
 	updateEnergy();
 	updateOxygen();
@@ -100,10 +107,10 @@ function newDay(){
 }
 
 
-function Recruit()
+function Recruit(numToBuy)
 {
-	var recruitCost = Math.floor(1 * Math.pow(1.01,(population + workers)));
-    if(oxygen >= recruitCost && water >= recruitCost && food >= recruitCost && credits >= recruitCost && population + workers < populationmax){                               
+	var recruitCost = 1 * numToBuy;
+    if(oxygen >= recruitCost && water >= recruitCost && food >= recruitCost && credits >= recruitCost && population + workers < populationmax && numToBuy > 0) {                               
 		
 		oxygen = oxygen - recruitCost;
 		food = food - recruitCost;
@@ -112,45 +119,66 @@ function Recruit()
 		population = population + 1;
 		updateCrew();                                          
     };
-    var nextCost = Math.floor(1 * Math.pow(1.01,(population + workers)));
-    document.getElementById('recruitCost').setAttribute("title", "Oxygen: "  + nextCost + " Food: " + nextCost + " Water: " + nextCost + " Credits: " + nextCost);
+    var nextCostx1 = 1 * 1;
+    var nextCostx10 = 1 * 10;
+    var nextCostx100 = 1 * 100;
+
+    document.getElementById('recruitCostx1').setAttribute("title", "Oxygen: "  + nextCostx1 + " Food: " + nextCostx1 + " Water: " + nextCostx1 + " Credits: " + nextCostx1);
+    document.getElementById('recruitCostx10').setAttribute("title", "Oxygen: "  + nextCostx10 + " Food: " + nextCostx10 + " Water: " + nextCostx10 + " Credits: " + nextCostx10);
+    document.getElementById('recruitCostx100').setAttribute("title", "Oxygen: "  + nextCostx100 + " Food: " + nextCostx100 + " Water: " + nextCostx100 + " Credits: " + nextCostx100);
     updateCrew();                                          
     
 }
 
-function buyCrewQuarters()
+function buyCrewQuarters(numToBuy)
 {
-	var qCost = Math.floor(10 + (quarters/3));
-    if(metals >= qCost && quarters < quartersmax){                               
-        quarters = quarters + 1;                                   
+	var baseCost = 10;
+	var qCost = calculateLinearCost(numToBuy, baseCost, quarters);
+    if(metals >= qCost && quarters < quartersmax  && numToBuy > 0){                               
+        quarters = quarters + numToBuy;                                   
     	metals = metals - qCost;                        
         document.getElementById('quarters').innerHTML = quarters + "/" + quartersmax;  
        	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
-    var nextCost = Math.floor(10 + (quarters/3));
-    document.getElementById('qsCost').innerHTML = nextCost;
+    var nextCostx1 = calculateLinearCost(1, baseCost, quarters);
+    var nextCostx10 = calculateLinearCost(10, baseCost, quarters);
+    var nextCostx100 = calculateLinearCost(100, baseCost, quarters);
+    
+	document.getElementById('qsCostx1').innerHTML = nextCostx1;
+	document.getElementById('qsCostx10').innerHTML = nextCostx10;
+	document.getElementById('qsCostx100').innerHTML = nextCostx100;
+
     updateCrew();
 }
 
-function buyGenerator(){
-    var genCost = 25;
-    if(metals >= genCost && generators < generatorsmax){                               
-        generators = generators + 1;                                   
+function buyGenerator(numToBuy){
+    var genCost = 25 * numToBuy;
+    if(metals >= genCost && generators < generatorsmax && numToBuy > 0){                               
+        generators = generators + numToBuy;                                   
     	metals = metals - genCost;                        
         document.getElementById('generators').innerHTML = generators + "/" + generatorsmax;  
     	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
-    var nextCost = 25;
-    document.getElementById('genCost').innerHTML = nextCost;
+    
+    var nextCostx1 = 25 * 1;
+	var nextCostx10 = 25 * 10;
+	var nextCostx100 = 25 * 100;	
+
+    document.getElementById('genCostx1').innerHTML = nextCostx1;
+    document.getElementById('genCostx10').innerHTML = nextCostx10;
+    document.getElementById('genCostx100').innerHTML = nextCostx100;
+
 };
 
-function buyMiner(){
+function buyMiner(numToBuy){
+	var baseCost = 15;
 	updateEnergy(); //calculate current energy
 	updateCrew(); // calculate current crew
-    var minerCost = Math.floor(15 + (autominers/3));
-    if(metals >= minerCost && energy < energymax && population > 0 && autominers < autominersmax){
+
+    var minerCost = calculateLinearCost(numToBuy, baseCost, autominers);
+    if(metals >= minerCost && energy < energymax && population > 0 && autominers < autominersmax  && numToBuy > 0){
     	population = population - 1; 
     	workers = workers + 1;                               
         autominers = autominers + 1;                                   
@@ -159,15 +187,26 @@ function buyMiner(){
     	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
-    var nextCost = Math.floor(15 + (autominers/3));
-    document.getElementById('minerCost').innerHTML = nextCost;
+    var nextCostx1 = calculateLinearCost(1, baseCost, autominers);
+    var nextCostx10 = calculateLinearCost(10, baseCost, autominers);
+    var nextCostx100 = calculateLinearCost(100, baseCost, autominers);
+    
+	document.getElementById('minerCostx1').innerHTML = nextCostx1;
+	document.getElementById('minerCostx10').innerHTML = nextCostx10;
+	document.getElementById('minerCostx100').innerHTML = nextCostx100;
+
+	//update metals progress bar
+	document.getElementById('metalsprogressbar').setAttribute("aria-valuenow", metals);
+    document.getElementById('metalsprogressbar').setAttribute("aria-valuemax", storageamttotal);
+    document.getElementById('metalsprogressbar').setAttribute("style", "width:" + Math.floor((metals/storageamttotal) * 100) + "%;");
 };
 
-function buyLifeSupport(){
+function buyLifeSupport(numToBuy){
+	var baseCost = 15;
 	updateEnergy(); //calculate current energy
 	updateCrew(); // calculate current crew
-    var lsCost = Math.floor(15 + (lifesupport/3));
-    if(metals >= lsCost && energy < energymax && population > 0 && lifesupport < lifesupportmax){                               
+    var lsCost = calculateLinearCost(numToBuy, baseCost, lifesupport);
+    if(metals >= lsCost && energy < energymax && population > 0 && lifesupport < lifesupportmax && numToBuy > 0){                               
         population = population - 1; 
     	workers = workers + 1;                               
         lifesupport = lifesupport + 1;                                   
@@ -176,15 +215,21 @@ function buyLifeSupport(){
     	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
-    var nextCost = Math.floor(15 + (lifesupport/3));
-    document.getElementById('lsCost').innerHTML = nextCost;
+    var nextCostx1 = calculateLinearCost(1, baseCost, lifesupport);
+    var nextCostx10 = calculateLinearCost(10, baseCost, lifesupport);
+    var nextCostx100 = calculateLinearCost(100, baseCost, lifesupport);
+    
+	document.getElementById('lsCostx1').innerHTML = nextCostx1;
+	document.getElementById('lsCostx10').innerHTML = nextCostx10;
+	document.getElementById('lsCostx100').innerHTML = nextCostx100;
 };
 
-function buyHydroponics(){
+function buyHydroponics(numToBuy){
+	var baseCost = 15;
 	updateEnergy(); //calculate current energy
 	updateCrew(); // calculate current crew
-    var farmCost = Math.floor(15 + (farms/3));
-    if(metals >= farmCost && energy < energymax && population > 0 && farms < farmsmax){                               
+    var farmCost = calculateLinearCost(numToBuy, baseCost, farms);
+    if(metals >= farmCost && energy < energymax && population > 0 && farms < farmsmax && numToBuy > 0){                               
         population = population - 1; 
     	workers = workers + 1;                               
         farms = farms + 1;                                   
@@ -193,15 +238,21 @@ function buyHydroponics(){
     	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
-    var nextCost = Math.floor(15 + (farms/3));
-    document.getElementById('hydroponicsCost').innerHTML = nextCost;
+    var nextCostx1 = calculateLinearCost(1, baseCost, farms);
+    var nextCostx10 = calculateLinearCost(10, baseCost, farms);
+    var nextCostx100 = calculateLinearCost(100, baseCost, farms);
+    
+	document.getElementById('hydroponicsCostx1').innerHTML = nextCostx1;
+	document.getElementById('hydroponicsCostx10').innerHTML = nextCostx10;
+	document.getElementById('hydroponicsCostx100').innerHTML = nextCostx100;
 };
 
-function buyRefinery(){
+function buyRefinery(numToBuy){
+	var baseCost = 15;
 	updateEnergy(); //calculate current energy
 	updateCrew(); // calculate current crew
-    var refCost = Math.floor(15 + (refineries/3));
-    if(metals >= refCost && energy < energymax && population > 0 && refineries < refineriesmax){                               
+    var refCost = calculateLinearCost(numToBuy, baseCost, refineries);
+    if(metals >= refCost && energy < energymax && population > 0 && refineries < refineriesmax && numToBuy > 0){                               
         population = population - 1; 
     	workers = workers + 1;                               
         refineries = refineries + 1;                                   
@@ -210,31 +261,41 @@ function buyRefinery(){
     	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
-    var nextCost = Math.floor(15 + (refineries/3));
-    document.getElementById('IceRefineryCost').innerHTML = nextCost;
+    var nextCostx1 = calculateLinearCost(1, baseCost, refineries);
+    var nextCostx10 = calculateLinearCost(10, baseCost, refineries);
+    var nextCostx100 = calculateLinearCost(100, baseCost, refineries);
+    
+	document.getElementById('refCostx1').innerHTML = nextCostx1;
+	document.getElementById('refCostx10').innerHTML = nextCostx10;
+	document.getElementById('refCostx100').innerHTML = nextCostx100;
 };
 
-function buyStorage(){
+function buyStorage(numToBuy){
 	updateEnergy(); //calculate current energy
 	updateCrew(); // calculate current crew
-    var mStoreCost = 50;
-    if(metals >= mStoreCost && storage < storagemax){                               
-        storage = storage + 1;                                   
+    var mStoreCost = 50 * numToBuy;
+    if(metals >= mStoreCost && storage < storagemax && numToBuy > 0){                               
+        storage = storage + numToBuy;                                   
     	metals = metals - mStoreCost;                        
         storageamttotal = storage * storageamt;
 		document.getElementById('storage').innerHTML = storage + "/" + storagemax;  
     	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
-    var nextCost = 50;
-    document.getElementById('StorageCost').innerHTML = nextCost;
+    var nextCostx1 = 50 * 1;
+    var nextCostx10 = 50 * 10;
+    var nextCostx100 = 50 * 100;
+    
+    document.getElementById('StorageCostx1').innerHTML = nextCostx1;
+	document.getElementById('StorageCostx10').innerHTML = nextCostx10;
+    document.getElementById('StorageCostx100').innerHTML = nextCostx100;
 };
 
-function buyResearchLab(){
+function buyResearchLab(numToBuy){
 	updateEnergy(); //calculate current energy
 	updateCrew(); // calculate current crew
-    var labCost = 100;
-    if(metals >= labCost && energy < energymax && population > 0 && researchlabs < researchlabsmax){                               
+    var labCost = 100 ;
+    if(metals >= labCost && energy < energymax && population > 0 && researchlabs < researchlabsmax && numToBuy > 0){                               
         population = population - 1; 
     	workers = workers + 1;                               
         researchlabs = researchlabs + 1;                                   
@@ -243,8 +304,13 @@ function buyResearchLab(){
     	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
-    var nextCost = 100;
-    document.getElementById('ResearchLabsCost').innerHTML = nextCost;
+    var nextCostx1 = 100 * 1;
+    var nextCostx10 = 100 * 10;
+    var nextCostx100 = 100 * 100;
+    
+	document.getElementById('ResearchLabsCostx1').innerHTML = nextCostx1;
+	document.getElementById('ResearchLabsCostx10').innerHTML = nextCostx10;
+	document.getElementById('ResearchLabsCostx100').innerHTML = nextCostx100;
 };
 
 function updateEnergy(){
@@ -332,6 +398,11 @@ function updateMaterials(){
 	//put metals in the html
 	var metalsTotal = metals + "/" + storageamttotal + " (+" + metalsbonus + ")";
 	document.getElementById("metals").innerHTML = metalsTotal;
+	document.getElementById('metalsprogressbar').setAttribute("aria-valuenow", metals);
+    document.getElementById('metalsprogressbar').setAttribute("aria-valuemax", storageamttotal);
+    document.getElementById('metalsprogressbar').setAttribute("style", "width:" + Math.floor((metals/storageamttotal) * 100) + "%;");
+
+    
 	//put ice in the html
 	var bonustotal = icebonus - icecost;
 
@@ -588,7 +659,7 @@ function updateResearch(){
 //functions to buy research levels
 function researchAdvMining()
 {
-	var upgradeCost = Math.floor(baseCost * Math.pow(1.75,advancedmining)) - (Math.floor(baseCost * Math.pow(1.75,advancedmining)) % 5);
+	var upgradeCost = Math.floor(baseResearchCost * Math.pow(1.75,advancedmining)) - (Math.floor(baseResearchCost * Math.pow(1.75,advancedmining)) % 5);
     if(researchpoints >= upgradeCost && advancedmining < 10){                               
         advancedmining = advancedmining + 1;
         researchpoints = researchpoints - upgradeCost;
@@ -598,7 +669,7 @@ function researchAdvMining()
     };
     if(advancedmining < 10)
     {
-    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancedmining)) - (Math.floor(baseCost * Math.pow(1.75,advancedmining)) % 5);
+    	var nextCost =  Math.floor(baseResearchCost * Math.pow(1.75,advancedmining)) - (Math.floor(baseResearchCost * Math.pow(1.75,advancedmining)) % 5);
     }
     else
     {
@@ -609,7 +680,7 @@ function researchAdvMining()
 
 function researchAdvOxygen()
 {
-	var upgradeCost = Math.floor(baseCost * Math.pow(1.75,advancedoxygen)) - (Math.floor(baseCost * Math.pow(1.75,advancedoxygen)) % 5);
+	var upgradeCost = Math.floor(baseResearchCost * Math.pow(1.75,advancedoxygen)) - (Math.floor(baseResearchCost * Math.pow(1.75,advancedoxygen)) % 5);
     if(researchpoints >= upgradeCost && advancedoxygen < 10){                               
         advancedoxygen = advancedoxygen + 1;
         researchpoints = researchpoints - upgradeCost;
@@ -619,7 +690,7 @@ function researchAdvOxygen()
     };
     if(advancedoxygen < 10)
     {
-    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancedoxygen)) - (Math.floor(baseCost * Math.pow(1.75,advancedoxygen)) % 5);
+    	var nextCost =  Math.floor(baseResearchCost * Math.pow(1.75,advancedoxygen)) - (Math.floor(baseResearchCost * Math.pow(1.75,advancedoxygen)) % 5);
     }
     else
     {
@@ -630,7 +701,7 @@ function researchAdvOxygen()
 
 function researchAdvWater()
 {
-	var upgradeCost = Math.floor(baseCost * Math.pow(1.75,advancedwater)) - (Math.floor(baseCost * Math.pow(1.75,advancedwater)) % 5);
+	var upgradeCost = Math.floor(baseResearchCost * Math.pow(1.75,advancedwater)) - (Math.floor(baseResearchCost * Math.pow(1.75,advancedwater)) % 5);
     if(researchpoints >= upgradeCost && advancedwater < 10){                               
         advancedwater = advancedwater + 1;
         researchpoints = researchpoints - upgradeCost;
@@ -640,7 +711,7 @@ function researchAdvWater()
     };
     if(advancedwater < 10)
     {
-    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancedwater)) - (Math.floor(baseCost * Math.pow(1.75,advancedwater)) % 5);
+    	var nextCost =  Math.floor(baseResearchCost * Math.pow(1.75,advancedwater)) - (Math.floor(baseResearchCost * Math.pow(1.75,advancedwater)) % 5);
     }
     else
     {
@@ -651,7 +722,7 @@ function researchAdvWater()
 
 function researchAdvFarming()
 {
-	var upgradeCost = Math.floor(baseCost * Math.pow(1.75,advancedfarming)) - (Math.floor(baseCost * Math.pow(1.75,advancedfarming)) % 5);
+	var upgradeCost = Math.floor(baseResearchCost * Math.pow(1.75,advancedfarming)) - (Math.floor(baseResearchCost * Math.pow(1.75,advancedfarming)) % 5);
     if(researchpoints >= upgradeCost && advancedfarming < 10){                               
         advancedfarming = advancedfarming + 1;
         researchpoints = researchpoints - upgradeCost;
@@ -661,7 +732,7 @@ function researchAdvFarming()
     };
     if(advancedfarming < 10)
     {
-    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancedfarming)) - (Math.floor(baseCost * Math.pow(1.75,advancedfarming)) % 5);
+    	var nextCost =  Math.floor(baseResearchCost * Math.pow(1.75,advancedfarming)) - (Math.floor(baseResearchCost * Math.pow(1.75,advancedfarming)) % 5);
     }
     else
     {
@@ -672,7 +743,7 @@ function researchAdvFarming()
 
 function researchAdvResearch()
 {
-	var upgradeCost = Math.floor(baseCost * Math.pow(1.75,advancedresearch)) - (Math.floor(baseCost * Math.pow(1.75,advancedresearch)) % 5);
+	var upgradeCost = Math.floor(baseResearchCost * Math.pow(1.75,advancedresearch)) - (Math.floor(baseResearchCost * Math.pow(1.75,advancedresearch)) % 5);
     if(researchpoints >= upgradeCost && advancedresearch < 10){                               
         advancedresearch = advancedresearch + 1;
         researchpoints = researchpoints - upgradeCost;
@@ -682,7 +753,7 @@ function researchAdvResearch()
     };
     if(advancedresearch < 10)
     {
-    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancedresearch)) - (Math.floor(baseCost * Math.pow(1.75,advancedresearch)) % 5);
+    	var nextCost =  Math.floor(baseResearchCost * Math.pow(1.75,advancedresearch)) - (Math.floor(baseResearchCost * Math.pow(1.75,advancedresearch)) % 5);
     }
     else
     {
@@ -693,7 +764,7 @@ function researchAdvResearch()
 
 function researchAdvEconomy()
 {
-	var upgradeCost = Math.floor(baseCost * Math.pow(1.75,advancedincome)) - (Math.floor(baseCost * Math.pow(1.75,advancedincome)) % 5);
+	var upgradeCost = Math.floor(baseResearchCost * Math.pow(1.75,advancedincome)) - (Math.floor(baseResearchCost * Math.pow(1.75,advancedincome)) % 5);
     if(researchpoints >= upgradeCost && advancedincome < 10){                               
         advancedincome = advancedincome + 1;
         researchpoints = researchpoints - upgradeCost;
@@ -703,7 +774,7 @@ function researchAdvEconomy()
     };
     if(advancedincome < 10)
     {
-    	var nextCost =  Math.floor(baseCost * Math.pow(1.75,advancedincome)) - (Math.floor(baseCost * Math.pow(1.75,advancedincome)) % 5);
+    	var nextCost =  Math.floor(baseResearchCost * Math.pow(1.75,advancedincome)) - (Math.floor(baseResearchCost * Math.pow(1.75,advancedincome)) % 5);
     }
     else
     {
@@ -729,6 +800,16 @@ function removeClassfromElement(id,myClass)
 function replaceAllClassesonElement(id,myClass)
 {
 	document.getElementById(id).className = myClass;
+}
+
+function calculateLinearCost(numToBuy, baseCost, numOfBuildings)
+{
+	var totalCost = 0;
+	for (i=0; i < numToBuy; i++)
+	{
+		totalCost += baseCost + Math.floor((numOfBuildings + i)/3)
+	}
+	return totalCost;
 }
 
 //game loop

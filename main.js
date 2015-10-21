@@ -78,12 +78,12 @@ function newDay(){
 	document.getElementById('quarters').innerHTML = quarters + "/" + quartersmax;  
     document.getElementById('generators').innerHTML = generators + "/" + generatorsmax;  
     document.getElementById('miners').innerHTML = autominers + "/" + autominersmax;  
-    document.getElementById('lifesupport').innerHTML = lifesupport + "/" + lifesupportmax;  
+    document.getElementById('oxygenGen').innerHTML = lifesupport + "/" + lifesupportmax;  
     document.getElementById('hydroponics').innerHTML = farms + "/" + farmsmax;  
     document.getElementById('refineries').innerHTML = refineries + "/" + refineriesmax;  
     document.getElementById('storage').innerHTML = storage + "/" + storagemax;  
     document.getElementById('labs').innerHTML = researchlabs + "/" + researchlabsmax; 
-    document.getElementById('combat').innerHTML = combat + "/" + combatmax; 
+    //document.getElementById('combat').innerHTML = combat + "/" + combatmax; 
     
     
     //calculate costs every update
@@ -103,7 +103,9 @@ function newDay(){
 	updateWater();
 	updateMaterials();
 	updateCrew();
+	updateTaxes();
 	updateResearch();
+	updateBars();
 }
 
 
@@ -116,7 +118,7 @@ function Recruit(numToBuy)
 		food = food - recruitCost;
 		water = water - recruitCost;
 		credits = credits - recruitCost;
-		population = population + 1;
+		population = population + numToBuy;
 		updateCrew();                                          
     };
     var nextCostx1 = 1 * 1;
@@ -127,7 +129,7 @@ function Recruit(numToBuy)
     document.getElementById('recruitCostx10').setAttribute("title", "Oxygen: "  + nextCostx10 + " Food: " + nextCostx10 + " Water: " + nextCostx10 + " Credits: " + nextCostx10);
     document.getElementById('recruitCostx100').setAttribute("title", "Oxygen: "  + nextCostx100 + " Food: " + nextCostx100 + " Water: " + nextCostx100 + " Credits: " + nextCostx100);
     updateCrew();                                          
-    
+    updateBars();
 }
 
 function buyCrewQuarters(numToBuy)
@@ -146,10 +148,11 @@ function buyCrewQuarters(numToBuy)
     var nextCostx100 = calculateLinearCost(100, baseCost, quarters);
     
 	document.getElementById('qsCostx1').innerHTML = nextCostx1;
-	document.getElementById('qsCostx10').innerHTML = nextCostx10;
-	document.getElementById('qsCostx100').innerHTML = nextCostx100;
-
+    document.getElementById('qsCostx10').innerHTML = nextCostx10;
+    document.getElementById('qsCostx100').innerHTML = nextCostx100;
+    
     updateCrew();
+    updateBars();
 }
 
 function buyGenerator(numToBuy){
@@ -169,7 +172,7 @@ function buyGenerator(numToBuy){
     document.getElementById('genCostx1').innerHTML = nextCostx1;
     document.getElementById('genCostx10').innerHTML = nextCostx10;
     document.getElementById('genCostx100').innerHTML = nextCostx100;
-
+    updateBars();
 };
 
 function buyMiner(numToBuy){
@@ -195,10 +198,7 @@ function buyMiner(numToBuy){
 	document.getElementById('minerCostx10').innerHTML = nextCostx10;
 	document.getElementById('minerCostx100').innerHTML = nextCostx100;
 
-	//update metals progress bar
-	document.getElementById('metalsprogressbar').setAttribute("aria-valuenow", metals);
-    document.getElementById('metalsprogressbar').setAttribute("aria-valuemax", storageamttotal);
-    document.getElementById('metalsprogressbar').setAttribute("style", "width:" + Math.floor((metals/storageamttotal) * 100) + "%;");
+    updateBars();
 };
 
 function buyLifeSupport(numToBuy){
@@ -211,7 +211,7 @@ function buyLifeSupport(numToBuy){
     	workers = workers + 1;                               
         lifesupport = lifesupport + 1;                                   
     	metals = metals - lsCost;                        
-        document.getElementById('lifesupport').innerHTML = lifesupport + "/" + lifesupportmax;  
+        document.getElementById('oxygenGen').innerHTML = lifesupport + "/" + lifesupportmax;  
     	var metalsTotal = metals + "/" + storageamttotal;
 		document.getElementById("metals").innerHTML = metalsTotal;
     };
@@ -219,9 +219,10 @@ function buyLifeSupport(numToBuy){
     var nextCostx10 = calculateLinearCost(10, baseCost, lifesupport);
     var nextCostx100 = calculateLinearCost(100, baseCost, lifesupport);
     
-	document.getElementById('lsCostx1').innerHTML = nextCostx1;
-	document.getElementById('lsCostx10').innerHTML = nextCostx10;
-	document.getElementById('lsCostx100').innerHTML = nextCostx100;
+	document.getElementById('oxyCostx1').innerHTML = nextCostx1;
+	document.getElementById('oxyCostx10').innerHTML = nextCostx10;
+	document.getElementById('oxyCostx100').innerHTML = nextCostx100;
+    updateBars();
 };
 
 function buyHydroponics(numToBuy){
@@ -245,6 +246,7 @@ function buyHydroponics(numToBuy){
 	document.getElementById('hydroponicsCostx1').innerHTML = nextCostx1;
 	document.getElementById('hydroponicsCostx10').innerHTML = nextCostx10;
 	document.getElementById('hydroponicsCostx100').innerHTML = nextCostx100;
+    updateBars();
 };
 
 function buyRefinery(numToBuy){
@@ -268,6 +270,7 @@ function buyRefinery(numToBuy){
 	document.getElementById('refCostx1').innerHTML = nextCostx1;
 	document.getElementById('refCostx10').innerHTML = nextCostx10;
 	document.getElementById('refCostx100').innerHTML = nextCostx100;
+    updateBars();
 };
 
 function buyStorage(numToBuy){
@@ -286,9 +289,10 @@ function buyStorage(numToBuy){
     var nextCostx10 = 50 * 10;
     var nextCostx100 = 50 * 100;
     
-    document.getElementById('StorageCostx1').innerHTML = nextCostx1;
-	document.getElementById('StorageCostx10').innerHTML = nextCostx10;
-    document.getElementById('StorageCostx100').innerHTML = nextCostx100;
+    document.getElementById('stoCostx1').innerHTML = nextCostx1;
+	document.getElementById('stoCostx10').innerHTML = nextCostx10;
+    document.getElementById('stoCostx100').innerHTML = nextCostx100;
+    updateBars();
 };
 
 function buyResearchLab(numToBuy){
@@ -308,26 +312,15 @@ function buyResearchLab(numToBuy){
     var nextCostx10 = 100 * 10;
     var nextCostx100 = 100 * 100;
     
-	document.getElementById('ResearchLabsCostx1').innerHTML = nextCostx1;
-	document.getElementById('ResearchLabsCostx10').innerHTML = nextCostx10;
-	document.getElementById('ResearchLabsCostx100').innerHTML = nextCostx100;
+	document.getElementById('labsCostx1').innerHTML = nextCostx1;
+	document.getElementById('labsCostx10').innerHTML = nextCostx10;
+	document.getElementById('labsCostx100').innerHTML = nextCostx100;
+    updateBars();
 };
 
 function updateEnergy(){
 	energy = autominers + lifesupport + farms + refineries + researchlabs;
 	energymax = 5 * generators;
-	var energyTotal = energy + "/" + energymax;
-	if(energy == energymax && !document.getElementById("energyrow").className.match(/(?:^|\s)danger(?!\S)/))
-	{
-		addClasstoElement("energyrow","danger")
-	}
-	if(energy != energymax)
-	{
-		replaceAllClassesonElement("energyrow", "")
-	}
-	document.getElementById("energy").innerHTML = energyTotal;
-	
-	
 }
 function updateMaterials(){
 	var random;
@@ -396,43 +389,8 @@ function updateMaterials(){
 		ice = 0;
 	}
 	//put metals in the html
-	var metalsTotal = metals + "/" + storageamttotal + " (+" + metalsbonus + ")";
-	document.getElementById("metals").innerHTML = metalsTotal;
-	document.getElementById('metalsprogressbar').setAttribute("aria-valuenow", metals);
-    document.getElementById('metalsprogressbar').setAttribute("aria-valuemax", storageamttotal);
-    document.getElementById('metalsprogressbar').setAttribute("style", "width:" + Math.floor((metals/storageamttotal) * 100) + "%;");
 
-    
-	//put ice in the html
-	var bonustotal = icebonus - icecost;
-
-	var iceTotal;
-	document.getElementById("ice").innerHTML = iceTotal;
-
-	if(icebonus > icecost)
-	{
-		replaceAllClassesonElement("icerow","success")
-		iceTotal = ice + "/" + storageamttotal + " (+" + bonustotal + ")";
-		document.getElementById("ice").innerHTML = iceTotal;
-	}
-	else if(icebonus < icecost)
-	{
-		replaceAllClassesonElement("icerow", "danger")
-		iceTotal = ice + "/" + storageamttotal + " (" + bonustotal + ")";
-		document.getElementById("ice").innerHTML = iceTotal;
-	}
-	else if (icebonus == icecost)
-	{
-		replaceAllClassesonElement("icerow", "")	
-		iceTotal = ice + "/" + storageamttotal + " (+" + bonustotal + ")";
-		document.getElementById("ice").innerHTML = iceTotal;
-	}
-	else
-	{
-		replaceAllClassesonElement("icerow", "")	
-		iceTotal = ice + "/" + storageamttotal;
-		document.getElementById("ice").innerHTML = iceTotal;
-	}
+	updateBars();
 }
 
 function updateOxygen(){
@@ -452,27 +410,6 @@ function updateOxygen(){
 	{
 		oxygen = 0;
 	}		
-	var oxygenTotal;
-	
-	var bonustotal = oxygenbonus - oxygencost;
-	
-	if(oxygenbonus > oxygencost)
-	{
-		replaceAllClassesonElement("oxygenrow","success");
-	    oxygenTotal = oxygen + "/" + storageamttotal + " (+" + bonustotal + ")";
-	}
-	else if(oxygenbonus < oxygencost)
-	{
-		replaceAllClassesonElement("oxygenrow", "danger");
-		var oxygenTotal = oxygen + "/" + storageamttotal + " (" + bonustotal + ")";
-	}
-	else if (oxygenbonus == oxygencost)
-	{
-		replaceAllClassesonElement("oxygenrow", "");	
-	    oxygenTotal = oxygen + "/" + storageamttotal + " (+" + bonustotal + ")";
-	}
-
-	document.getElementById("oxygen").innerHTML = oxygenTotal;
 	
 }
 
@@ -493,26 +430,6 @@ function updateFood(){
 	{
 		food = 0;
 	}		
-	var foodTotal;
-	var bonustotal = foodbonus - foodcost
-	
-	if(foodbonus > foodcost)
-	{
-		replaceAllClassesonElement("foodrow","success");
-		foodTotal = food + "/" + storageamttotal  + " (+" + bonustotal + ")";
-	}
-	else if(foodbonus < foodcost)
-	{
-		replaceAllClassesonElement("foodrow", "danger");
-		foodTotal = food + "/" + storageamttotal  + " (" + bonustotal + ")";
-	}
-	else if (foodbonus == foodcost)
-	{
-		replaceAllClassesonElement("foodrow", "");	
-		foodTotal = food + "/" + storageamttotal  + " (+" + bonustotal + ")";
-	}
-
-	document.getElementById("food").innerHTML = foodTotal;
 }
 
 function updateWater(){
@@ -530,27 +447,8 @@ function updateWater(){
 	if (water < 0)
 	{
 		water = 0;
-	}		
-	var waterTotal;
-	var bonustotal = waterbonus - watercost;
-	
-	if(waterbonus > watercost)
-	{
-		replaceAllClassesonElement("waterrow","success");
-		waterTotal = water + "/" + storageamttotal  + " (+"+ bonustotal + ")";
-	}
-	else if(waterbonus < watercost)
-	{
-		replaceAllClassesonElement("waterrow", "danger");
-		waterTotal = water + "/" + storageamttotal  + " ("+ bonustotal + ")";
-	}
-	else if (waterbonus == watercost)
-	{
-		replaceAllClassesonElement("waterrow", "");	
-		waterTotal = water + "/" + storageamttotal  + " (+"+ bonustotal + ")";
 	}
 
-	document.getElementById("water").innerHTML = waterTotal;
 }
 
 
@@ -625,27 +523,18 @@ function updateCrew(){
 	//check for not enough water/food/etc and kill off population
 	//if worker is killed reduce efficiency of random resource until supplies are restored
 
-	var popTotal = workers + "/" + population + "/" + populationmax;
-	
+}
+
+function updateTaxes()
+{
+	updateCrew
+	creditsbonus = 0;
 	var taxablePop = workers + population;
 	creditsbonus = creditsbonus + Math.floor(taxablePop * (1 + (0.05 * advancedincome)));
 	//add tax to current credits
 	credits = credits + Math.floor(taxablePop * (1 + (0.05 * advancedincome)));
 	var creditsTotal = credits + " (+" + creditsbonus + ")";
-
-	if(taxablePop == populationmax && !document.getElementById("populationrow").className.match(/(?:^|\s)danger(?!\S)/))
-	{
-		addClasstoElement("populationrow","danger")
-	}
-	if( taxablePop != populationmax)
-	{
-		replaceAllClassesonElement("populationrow", "")
-	}
-
-	document.getElementById("population").innerHTML = popTotal;
 	document.getElementById("credits").innerHTML = creditsTotal;
-
-
 }
 
 function updateResearch(){
@@ -654,6 +543,158 @@ function updateResearch(){
 	researchbonus = researchbonus + Math.floor(researchlabs * (1 + (0.05 * advancedresearch)));
 	var researchTotal = researchpoints + " (+" + researchbonus + ")";
 	document.getElementById("researchpoints").innerHTML = researchTotal;
+}
+
+//update all progress bars
+function updateBars()
+{
+	//population bar
+	var totalPop = workers + population;
+	
+	if(totalPop == populationmax)
+	{
+		replaceAllClassesonElement("workerprogressbar","progress-bar progress-bar-danger");
+		replaceAllClassesonElement("populationprogressbar","progress-bar progress-bar-warning");
+	}
+	if( totalPop != populationmax)
+	{
+		replaceAllClassesonElement("workerprogressbar","progress-bar progress-bar-info");
+		replaceAllClassesonElement("populationprogressbar","progress-bar");
+		replaceAllClassesonElement("populationleftprogressbar","progress-bar progress-bar-success");
+	}
+	document.getElementById("population").innerHTML = population;
+	document.getElementById("workers").innerHTML = workers;
+	document.getElementById("populationleft").innerHTML = populationmax - totalPop;
+	document.getElementById('workerprogressbar').setAttribute("style", "width:" + Math.floor((workers/populationmax) * 100) + "%;");
+	document.getElementById('populationprogressbar').setAttribute("style", "width:" + Math.floor((population/populationmax) * 100) + "%;");
+	document.getElementById('populationleftprogressbar').setAttribute("style", "width:" + Math.floor(((populationmax - totalPop)/populationmax) * 100) + "%;");
+	
+	//energy bar
+	if(energy == energymax)
+	{
+		replaceAllClassesonElement("energyprogressbar", "progress-bar progress-bar-danger")
+	}
+	if(energy != energymax)
+	{
+		replaceAllClassesonElement("energyprogressbar", "progress-bar progress-bar-info")
+	}
+	document.getElementById("energy").innerHTML = energy;
+	document.getElementById('energyprogressbar').setAttribute("style", "width:" + Math.floor((energy/energymax) * 100) + "%;");
+	document.getElementById("energyleft").innerHTML = energymax - energy;
+	document.getElementById('energyleftprogressbar').setAttribute("style", "width:" + Math.floor(((energymax - energy)/energymax) * 100) + "%;");
+
+	//metals/ice bar
+	if(metalsbonus > 0)
+	{
+		replaceAllClassesonElement("metalsprogressbar", "progress-bar progress-bar-striped progress-bar-success active")
+		metalsTotal = metals + "/" + storageamttotal + " (+" + metalsbonus + ")";
+	}
+	else if (metalsbonus == 0 || metals == storageamttotal)
+	{
+		replaceAllClassesonElement("metalsprogressbar", "progress-bar progress-bar-info")	
+		metalsTotal = metals + "/" + storageamttotal + " (+" + metalsbonus + ")";
+	}
+	
+	document.getElementById("metals").innerHTML = metalsTotal;
+	document.getElementById('metalsprogressbar').setAttribute("style", "width:" + Math.floor((metals/storageamttotal) * 100) + "%;");
+    
+	//put ice in the html
+	var bonustotal = icebonus - icecost;
+
+	var iceTotal;
+	
+	if (bonustotal == 0 || ice == storageamttotal)
+	{
+		replaceAllClassesonElement("iceprogressbar", "progress-bar progress-bar-info")	
+		iceTotal = ice + "/" + storageamttotal + " (+" + bonustotal + ")";
+	}
+	else if(bonustotal > 0)
+	{
+		replaceAllClassesonElement("iceprogressbar","progress-bar progress-bar-striped progress-bar-success active")
+		iceTotal = ice + "/" + storageamttotal + " (+" + bonustotal + ")";
+	}
+	else if(bonustotal < 0)
+	{
+		replaceAllClassesonElement("iceprogressbar", "progress-bar progress-bar-striped progress-bar-danger active")
+		iceTotal = ice + "/" + storageamttotal + " (" + bonustotal + ")";
+	}
+	
+	document.getElementById("ice").innerHTML = iceTotal;
+	document.getElementById('iceprogressbar').setAttribute("style", "width:" + Math.floor((ice/storageamttotal) * 100) + "%;");
+
+	//oxygen bar
+	var oxygenTotal;
+	
+	var bonustotal = oxygenbonus - oxygencost;
+	
+	if (oxygenbonus == oxygencost || oxygen == storageamttotal)
+	{
+		replaceAllClassesonElement("oxygenprogressbar", "progress-bar progress-bar-info");	
+	    oxygenTotal = oxygen + "/" + storageamttotal + " (+" + bonustotal + ")";
+	}
+	else if(bonustotal > 0)
+	{
+		replaceAllClassesonElement("oxygenprogressbar","progress-bar progress-bar-striped progress-bar-success active");
+	    oxygenTotal = oxygen + "/" + storageamttotal + " (+" + bonustotal + ")";
+	}
+	else if(bonustotal < 0)
+	{
+		replaceAllClassesonElement("oxygenprogressbar", "progress-bar progress-bar-striped progress-bar-danger active");
+		var oxygenTotal = oxygen + "/" + storageamttotal + " (" + bonustotal + ")";
+	}
+
+	document.getElementById("oxygen").innerHTML = oxygenTotal;
+	document.getElementById('oxygenprogressbar').setAttribute("style", "width:" + Math.floor((oxygen/storageamttotal) * 100) + "%;");
+
+	//food bar
+	var foodTotal;
+	var bonustotal = foodbonus - foodcost
+	
+	if (foodbonus == foodcost || food == storageamttotal)
+	{
+		replaceAllClassesonElement("foodprogressbar", "progress-bar progress-bar-info");	
+		foodTotal = food + "/" + storageamttotal  + " (+" + bonustotal + ")";
+	}
+	else if(foodbonus > foodcost)
+	{
+		replaceAllClassesonElement("foodprogressbar","progress-bar progress-bar-striped progress-bar-success active");
+		foodTotal = food + "/" + storageamttotal  + " (+" + bonustotal + ")";
+	}
+	else if(foodbonus < foodcost)
+	{
+		replaceAllClassesonElement("foodprogressbar", "progress-bar progress-bar-striped progress-bar-danger active");
+		foodTotal = food + "/" + storageamttotal  + " (" + bonustotal + ")";
+	}
+	
+
+	document.getElementById("food").innerHTML = foodTotal;
+	document.getElementById('foodprogressbar').setAttribute("style", "width:" + Math.floor((food/storageamttotal) * 100) + "%;");
+
+	//water bar
+	var waterTotal;
+	var bonustotal = waterbonus - watercost;
+	
+		
+	if (waterbonus == watercost || water == storageamttotal)
+	{
+		replaceAllClassesonElement("waterprogressbar", "progress-bar progress-bar-info");	
+		waterTotal = water + "/" + storageamttotal  + " (+"+ bonustotal + ")";
+	}
+	else if(waterbonus > watercost)
+	{
+		replaceAllClassesonElement("waterprogressbar","progress-bar progress-bar-striped progress-bar-success active");
+		waterTotal = water + "/" + storageamttotal  + " (+"+ bonustotal + ")";
+	}
+	else if(waterbonus < watercost)
+	{
+		replaceAllClassesonElement("waterprogressbar", "progress-bar progress-bar-striped progress-bar-danger active");
+		waterTotal = water + "/" + storageamttotal  + " ("+ bonustotal + ")";
+	}
+
+	document.getElementById("water").innerHTML = waterTotal;
+	document.getElementById('waterprogressbar').setAttribute("style", "width:" + Math.floor((water/storageamttotal) * 100) + "%;");
+
+	
 }
 
 //functions to buy research levels
@@ -811,6 +852,100 @@ function calculateLinearCost(numToBuy, baseCost, numOfBuildings)
 	}
 	return totalCost;
 }
+
+//JQuery click captures
+
+$("#recruitCostx1").on('click', function() {
+   Recruit(1);
+});
+$("#recruitCostx10").on('click', function() {
+	Recruit(10);
+});
+$("#recruitCostx100").on('click', function() {
+	Recruit(100);
+});
+
+$("#qsBuyx1").on('click', function() {
+   buyCrewQuarters(1);
+});
+$("#qsBuyx10").on('click', function() {
+   buyCrewQuarters(10);
+});
+$("#qsBuyx100").on('click', function() {
+   buyCrewQuarters(100);
+});
+
+$("#genBuyx1").on('click', function() {
+   buyGenerator(1);
+});
+$("#genBuyx10").on('click', function() {
+   buyGenerator(10);
+});
+$("#genBuyx100").on('click', function() {
+   buyGenerator(100);
+});
+
+$("#minerBuyx1").on('click', function() {
+   buyMiner(1);
+});
+$("#minerBuyx10").on('click', function() {
+   buyMiner(10);
+});
+$("#minerBuyx100").on('click', function() {
+   buyMiner(100);
+});
+
+$("#oxyBuyx1").on('click', function() {
+   buyLifeSupport(1);
+});
+$("#oxyBuyx10").on('click', function() {
+   buyLifeSupport(10);
+});
+$("#oxyBuyx100").on('click', function() {
+   buyLifeSupport(100);
+});
+
+$("#hydroponicsBuyx1").on('click', function() {
+   buyHydroponics(1);
+});
+$("#hydroponicsBuyx10").on('click', function() {
+   buyHydroponics(10);
+});
+$("#hydroponicsBuyx100").on('click', function() {
+   buyHydroponics(100);
+});
+
+$("#refBuyx1").on('click', function() {
+   buyRefinery(1);
+});
+$("#refBuyx10").on('click', function() {
+   buyRefinery(10);
+});
+$("#refBuyx100").on('click', function() {
+   buyRefinery(100);
+});
+
+$("#labsBuyx1").on('click', function() {
+   buyResearchLab(1);
+});
+$("#labsBuyx10").on('click', function() {
+   buyResearchLab(10);
+});
+$("#labsBuyx100").on('click', function() {
+   buyResearchLab(100);
+});
+
+$("#stoBuyx1").on('click', function() {
+   buyStorage(1);
+});
+$("#stoBuyx10").on('click', function() {
+   buyStorage(10);
+});
+$("#stoBuyx100").on('click', function() {
+   buyStorage(100);
+});
+
+
 
 //game loop
 window.setInterval(function(){newDay();}, 1000);

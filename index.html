@@ -48,7 +48,6 @@
     <div class="collapse navbar-collapse" id="tabsNavbar">
       <ul class="nav navbar-nav">
         <li><a data-toggle="collapse" href="#resources">Resources</a></li>
-        <li><a data-toggle="collapse" href="#building">Building</a></li>
         <li><a data-toggle="collapse" href="#research">Research</a></li>
         <li><a data-toggle="collapse" href="#shipconstruction">Ship Construction</a></li> 
       </ul>
@@ -63,143 +62,222 @@
 	</div>
 
 	<div class="container-fluid">
-
-	   <table class="table table-bordered table-responsive"> 
-		   <tbody>
-		   		<tr id="populationrow"><td><label>Population:</label></td><td><span id="population" data-toggle="tooltip" data-placement="right" title="Workers/Free/Maximum"></span></td><td>
-		   		<button class="btn btn-default btn-xs glyphicon glyphicon-user" id="recruitCost" data-toggle="collapse" data-target="#recruitCrew"> Recruit</button>
-		   		<div class="collapse" id="recruitCrew">
-		   			<button class="btn btn-default btn-xs glyphicon glyphicon-user" id="recruitCostx1" data-toggle="tooltip" title="" onclick="Recruit(1)">x1</button>
-		   			<button class="btn btn-default btn-xs glyphicon glyphicon-user" id="recruitCostx10" data-toggle="tooltip" title="" onclick="Recruit(10)">x10</button>
-		   			<button class="btn btn-default btn-xs glyphicon glyphicon-user" id="recruitCostx100" data-toggle="tooltip" title="" onclick="Recruit(100)">x100</button>
-				</div>
-		   		</td></tr>
-		   		<tr id="energyrow"><td>Energy:</td><td id="energy"></td><td></td></tr>
-		   		<tr id="metalsrow">
-		   		<td>
-		   		<div class="row">
-		   			<div class="col-sm-2 col-md-2 col-lg-2"><label>Metals: </label></div>
-		   			<div class="col-sm-10 col-md-10 col-lg-10">
-			   		 	<div class="progress">
-		  					<div id="metalsprogressbar" class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="50" style="width:70%">
-		    					<span id="metals"></span>
-		  					</div>
-						</div>
+		<div class="row">
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				<label>Population:</label>
+			</div>
+			<div class="col-sm-8 col-md-8 col-lg-8">
+				<div class="progress">
+					<div id="workerprogressbar" class="progress-bar progress-bar-info" role="progressbar" style="width:100%">
+						<span id="workers"></span>
+					</div>
+					<div id="populationprogressbar" class="progress-bar" role="progressbar" style="width:100%">
+						<span id="population"></span>
+					</div>
+					<div id="populationleftprogressbar" class="progress-bar progress-bar-success" role="progressbar" style="width:100%">
+						<span id="populationleft"></span>
 					</div>
 				</div>
-		   		</td><td></td></tr>
-		   		<tr id="icerow"><td>Ice:</td><td id="ice"></td><td></td></tr>
-		   		<tr id="oxygenrow"><td>Oxygen:</td><td id="oxygen"></td><td></td></tr>
-		   		<tr id="foodrow"><td>Food:</td><td id="food"></td><td></td></tr>
-		   		<tr id="waterrow"><td>Water:</td><td id="water"></td><td></td></tr>
-		   		<tr id="creditsrow"><td>Credits:</td><td id="credits"></td><td></td></tr>
-		   		<tr id="researchrow"><td>Research:</td><td id="researchpoints"></td><td></td></tr>
-		   </tbody>
-	   </table> 
-	</div>
-</div>
-
-
-
-
-<div class="container-fluid collapse in" id="building">
-
-	<div class="page-header">
-		<h1>Building</h1>
-		<button class="btn btn-default btn-sm"><span class="badge">Owned</span></button> <span class="badge">Cost</span>
-	</div>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2">
+					<div class="btn-group">
+						<div class="btn-group btn-group-xs">
+							<button class="btn btn-default dropdown-toggle" data-toggle="dropdown"> Recruit <span class="caret"></span></button>
+							<ul class="dropdown-menu" role="menu">
+								<li><a class="glyphicon glyphicon-user" id="recruitCostx1" href="#"> x1</a></li>
+								<li><a class="glyphicon glyphicon-user" id="recruitCostx10" href="#"> x10</a></li>
+								<li><a class="glyphicon glyphicon-user" id="recruitCostx100" href="#"> x100</a></li>
+							</ul>	
+						</div>
+						<div class="btn-group btn-group-xs">
+							<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Crew Quarters <span class="badge" id="quarters"></span> <span class="caret"></span></button>
+							<ul class="dropdown-menu" role="menu">
+								<li><a id="qsBuyx1" href="#"> x1 <span class="badge" id="qsCostx1"></span></a></li>
+								<li><a id="qsBuyx10" href="#"> x10 <span class="badge" id="qsCostx10"></span></a></li>
+								<li><a id="qsBuyx100" href="#"> x100 <span class="badge" id="qsCostx100"></span></a></li>
+							</ul>	
+						</div>
+					</div>
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				<label>Energy:</label>
+			</div>
+			<div class="col-sm-8 col-md-8 col-lg-8">
+				<div class="progress">
+					<div id="energyprogressbar" class="progress-bar progress-bar-info" role="progressbar" style="width:100%">
+						<span id="energy"></span>
+					</div>
+					<div id="energyleftprogressbar" class="progress-bar progress-bar-success" role="progressbar" style="width:100%">
+						<span id="energyleft"></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				
+					<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">Generator <span class="badge" id="generators"></span> <span class="caret"></span></button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a id="genBuyx1" href="#"> x1 <span class="badge" id="genCostx1"></span></a></li>
+						<li><a id="genBuyx10" href="#"> x10 <span class="badge" id="genCostx10"></span></a></li>
+						<li><a id="genBuyx100" href="#"> x100 <span class="badge" id="genCostx100"></span></a></li>
+					</ul>
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				<label>Metals:</label>
+			</div>
+			<div class="col-sm-8 col-md-8 col-lg-8">
+				<div class="progress">
+					<div id="metalsprogressbar" class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width:70%">
+						<span id="metals"></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				
+					<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">Autominer <span class="badge" id="miners"></span> <span class="caret"></span></button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a id="minerBuyx1" href="#"> x1 <span class="badge" id="minerCostx1"></span></a></li>
+						<li><a id="minerBuyx10" href="#"> x10 <span class="badge" id="minerCostx10"></span></a></li>
+						<li><a id="minerBuyx100" href="#"> x100 <span class="badge" id="minerCostx100"></span></a></li>
+					</ul>
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				<label>Ice:</label>
+			</div>
+			<div class="col-sm-8 col-md-8 col-lg-8">
+				<div class="progress">
+					<div id="iceprogressbar" class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width:70%">
+						<span id="ice"></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				<label>Oxygen:</label>
+			</div>
+			<div class="col-sm-8 col-md-8 col-lg-8">
+				<div class="progress">
+					<div id="oxygenprogressbar" class="progress-bar progress-bar-info" role="progressbar" style="width:70%">
+						<span id="oxygen"></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				
+					<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">Oxygen Generator <span class="badge" id="oxygenGen"></span> <span class="caret"></span></button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a id="oxyBuyx1" href="#"> x1 <span class="badge" id="oxyCostx1"></span></a></li>
+						<li><a id="oxyBuyx10" href="#"> x10 <span class="badge" id="oxyCostx10"></span></a></li>
+						<li><a id="oxyBuyx100" href="#"> x100 <span class="badge" id="oxyCostx100"></span></a></li>
+					</ul>				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				<label>Food:</label>
+			</div>
+			<div class="col-sm-8 col-md-8 col-lg-8">
+				<div class="progress">
+					<div id="foodprogressbar" class="progress-bar progress-bar-info" role="progressbar" style="width:70%">
+						<span id="food"></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				
+					<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">Hydroponic Farm <span class="badge" id="hydroponics"></span> <span class="caret"></span></button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a id="hydroponicsBuyx1" href="#"> x1 <span class="badge" id="hydroponicsCostx1"></span></a></li>
+						<li><a id="hydroponicsBuyx10" href="#"> x10 <span class="badge" id="hydroponicsCostx10"></span></a></li>
+						<li><a id="hydroponicsBuyx100" href="#"> x100 <span class="badge" id="hydroponicsCostx100"></span></a></li>
+					</ul>
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				<label>Water:</label>
+			</div>
+			<div class="col-sm-8 col-md-8 col-lg-8">
+				<div class="progress">
+					<div id="waterprogressbar" class="progress-bar progress-bar-info" role="progressbar" style="width:70%">
+						<span id="water"></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				
+					<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">Ice Refinery <span class="badge" id="refineries"></span> <span class="caret"></span></button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a id="refBuyx1" href="#"> x1 <span class="badge" id="refCostx1"></span></a></li>
+						<li><a id="refBuyx10" href="#"> x10 <span class="badge" id="refCostx10"></span></a></li>
+						<li><a id="refBuyx100" href="#"> x100 <span class="badge" id="refCostx100"></span></a></li>
+					</ul>
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				<label>Research:</label>
+			</div>
+			<div class="col-sm-8 col-md-8 col-lg-8">
+				<div class="progress">
+					<div id="researchprogressbar" class="progress-bar progress-bar-info" role="progressbar" style="width:100%">
+						<span id="researchpoints"></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				
+					<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">Research Lab <span class="badge" id="labs"></span> <span class="caret"></span></button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a id="labsBuyx1" href="#"> x1 <span class="badge" id="labsCostx1"></span></a></li>
+						<li><a id="labsBuyx10" href="#"> x10 <span class="badge" id="labsCostx10"></span></a></li>
+						<li><a id="labsBuyx100" href="#"> x100 <span class="badge" id="labsCostx100"></span></a></li>
+					</ul>
 		
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-4">
-				<button type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#buyMiners">Buy Autominers <span class="badge"id="miners">0</span></button>
-				<br />
-				<div class="collapse" id="buyMiners">	
-					<button class="btn btn-default btn-sm" onclick="buyMiner(1)">x1 <span class="badge" id="minerCostx1">15</span></button>
-					<button class="btn btn-default btn-sm" onclick="buyMiner(10)">x10 <span class="badge" id="minerCostx10">15</span></button>
-					<button class="btn btn-default btn-sm" onclick="buyMiner(100)">x100 <span class="badge" id="minerCostx100">15</span></button>
-		        </div>
-		    </div>
-		    <div class="col-sm-4">
-				<button type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#buyOxygen">Buy Oxygen Generator <span class="badge"id="lifesupport">0</span></button>
-				<br />
-				<div class="collapse" id="buyOxygen">	
-					<button class="btn btn-default btn-sm" onclick="buyLifeSupport(1)">x1 <span class="badge" id="lsCostx1">15</span></button>
-					<button class="btn btn-default btn-sm" onclick="buyLifeSupport(10)">x10 <span class="badge" id="lsCostx10">15</span></button>
-					<button class="btn btn-default btn-sm" onclick="buyLifeSupport(100)">x100 <span class="badge" id="lsCostx100">15</span></button>
-		        </div>
-		    </div>
-		    <div class="col-sm-4">
-				<button type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#buyHydroponics">Buy Hydroponics <span class="badge"id="hydroponics">0</span></button>
-				<br />
-				<div class="collapse" id="buyHydroponics">	
-					<button class="btn btn-default btn-sm" onclick="buyHydroponics(1)">x1 <span class="badge" id="hydroponicsCostx1">15</span></button>
-					<button class="btn btn-default btn-sm" onclick="buyHydroponics(10)">x10 <span class="badge" id="hydroponicsCostx10">15</span></button>
-					<button class="btn btn-default btn-sm" onclick="buyHydroponics(100)">x100 <span class="badge" id="hydroponicsCostx100">15</span></button>
-		        </div>
-		    </div>
+			</div>
 		</div>
 		<div class="row">
-			<div class="col-sm-4">
-				<button type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#buyRefineries">Buy Ice Refinery <span class="badge"id="refineries">0</span></button>
-				<br />
-				<div class="collapse" id="buyRefineries">	
-					<button class="btn btn-default btn-sm" onclick="buyRefinery(1)">x1 <span class="badge" id="refCostx1">15</span></button>
-					<button class="btn btn-default btn-sm" onclick="buyRefinery(10)">x10 <span class="badge" id="refCostx10">15</span></button>
-					<button class="btn btn-default btn-sm" onclick="buyRefinery(100)">x100 <span class="badge" id="refCostx100">15</span></button>
-		        </div>
-		    </div>
-		    <div class="col-sm-4">
-				<button type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#buyLabs">Buy Research Lab <span class="badge"id="labs">0</span></button>
-				<br />
-				<div class="collapse" id="buyLabs">	
-					<button class="btn btn-default btn-sm" onclick="buyResearchLab(1)">x1 <span class="badge" id="ResearchLabsCostx1">100</span></button>
-					<button class="btn btn-default btn-sm" onclick="buyResearchLab(1)">x10 <span class="badge" id="ResearchLabsCostx10">100</span></button>
-					<button class="btn btn-default btn-sm" onclick="buyResearchLab(1)">x100 <span class="badge" id="ResearchLabsCostx100">100</span></button>
-		        </div>
-		    </div>
-		    <div class="col-sm-4">
-				<button class="btn btn-default btn-sm" onclick="#">Buy Combat <span class="badge"id="combat">0</span></button>
-		        <span class="badge" id="combatCost">N/A</span></span>
-		    </div>
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				<label>Credits:</label>
+			</div>
+			<div class="col-sm-8 col-md-8 col-lg-8">
+				<div class="progress">
+					<div id="creditsprogressbar" class="progress-bar progress-bar-success" role="progressbar" style="width:100%">
+						<span id="credits"></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				
+					<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">Storage <span class="badge" id="storage"></span> <span class="caret"></span></button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a id="stoBuyx1" href="#"> x1 <span class="badge" id="stoCostx1"></span></a></li>
+						<li><a id="stoBuyx10" href="#"> x10 <span class="badge" id="stoCostx10"></span></a></li>
+						<li><a id="stoBuyx100" href="#"> x100 <span class="badge" id="stoCostx100"></span></a></li>
+					</ul>
+				
+			</div>
 		</div>
-		<div class="row">
-			<div class="col-sm-4">
-			
-				<button type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#buyGenerators">Buy Generator <span class="badge" id="generators">1</span></button>
-				<br />
-				<div class="collapse" id="buyGenerators">
-					<button class="btn btn-default btn-sm" onclick="buyGenerator(1)">x1 <span class="badge" id="genCostx1">25</span></button>
-			        <button class="btn btn-default btn-sm" onclick="buyGenerator(10)">x10 <span class="badge" id="genCostx10">250</span></button>
-			        <button class="btn btn-default btn-sm" onclick="buyGenerator(100)">x100 <span class="badge" id="genCostx100">2500</span></button>
-		        </div>
-		        
-		    </div>
-		    <div class="col-sm-4">
-		    <button type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#buyStorage">Buy Storage <span class="badge" id="storage">0</span></button>
-		    	<br />
-
-		    	<div class="collapse" id="buyStorage">
-				<button class="btn btn-default btn-sm" onclick="buyStorage(1)">x1 <span class="badge" id="StorageCostx1">50</span></span></button>
-			        <button class="btn btn-default btn-sm" onclick="buyStorage(10)">x10 <span class="badge" id="StorageCostx10">500</span></span></button>
-			        <button class="btn btn-default btn-sm" onclick="buyStorage(100)">x100 <span class="badge" id="StorageCostx100">5000</span></span></button>
-			    </div>
-		        
-		    </div>
-		    <div class="col-sm-4">
-		    <button type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#buyQuarters">Buy Crew Quarters <span class="badge"id="quarters">1</span></button>
-		    <br />
-				<div class="collapse" id="buyQuarters">
-					<button class="btn btn-default btn-sm" onclick="buyCrewQuarters(1)">x1 <span class="badge" id="qsCostx1">10</span></button>
-					<button class="btn btn-default btn-sm" onclick="buyCrewQuarters(10)">x10 <span class="badge" id="qsCostx10">100</span></button>
-					<button class="btn btn-default btn-sm" onclick="buyCrewQuarters(100)">x100 <span class="badge" id="qsCostx100">1000</span></button>
-		        </div>
-		    </div>
-		</div>
-			
 	</div>
+
+
+	   
 </div>
-   
 
 <div class="container-fluid collapse" id="research">
 	<div class="page-header">

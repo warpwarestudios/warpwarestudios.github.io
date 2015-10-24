@@ -1,6 +1,6 @@
 
 //ship variables
-var mothership = {name:"Mother Ship",currentsize:0,max:0,facilities:[1000,900,650,650,650,650,500,500,500]};
+var mothership = {shipName:"Mother Ship",currentsize:0,max:0,facilities:[1000,900,650,650,650,650,500,500,500]};
 var shipList = new Array();
 
 //holding variables
@@ -46,15 +46,15 @@ var combat = 0;
 var storage = 1; 
 
 //maximum allowed of each building
-var generatorsmax = 1000; //increases maximum energy, index = 0
-var quartersmax = 900; //housing for crew, index = 1
-var autominersmax = 650; //increases resources/second, index = 2
-var lifesupportmax = 650; //increases oxygen supplies, index = 3
-var farmsmax = 650; //increases food supplies, index = 4
-var refineriesmax = 650; //turns ice into water, index = 5
-var researchlabsmax = 500; //research facility for new technology, index = 6
-var combatmax = 500; //combat capabilities of your fleet, index = 7
-var storagemax = 500; //storage capacity of your fleet, index = 8
+var generatorsmax = 0; //increases maximum energy, index = 0
+var quartersmax = 0; //housing for crew, index = 1
+var autominersmax = 0; //increases resources/second, index = 2
+var lifesupportmax = 0; //increases oxygen supplies, index = 3
+var farmsmax = 0; //increases food supplies, index = 4
+var refineriesmax = 0; //turns ice into water, index = 5
+var researchlabsmax = 0; //research facility for new technology, index = 6
+var combatmax = 0; //combat capabilities of your fleet, index = 7
+var storagemax = 0; //storage capacity of your fleet, index = 8
 
 
 //research levels
@@ -114,35 +114,73 @@ function newDay(){
 
 	//display ships in list
 	displayShips();
+
+	//Jquery to update progress bar labels
+
+	$('.progressbar-label').each(function(){
+		//$(this).parent().css("min-width", "100%");
+		if($(this).width() > $(this).parent().width()){
+	    	 $(this).css("color","black");   
+	    }
+	    else	
+	    {
+	   		$(this).css("color","white");   
+	    }
+	});
 }
 //functions to display ships
 function displayShips()
 {
 	mothership.currentsize = quarters + autominers + lifesupport + farms + refineries + storage + researchlabs;
-	document.getElementById('shipNameMothership').innerHTML = mothership.name;  
-    document.getElementById('shipSizeMothership').innerHTML = mothership.currentsize + "/" + mothership.max;  
+	document.getElementById('shipList').innerHTML = "<li class='list-group-item'><span class='badge' id='shipSizeMothership'>" +  mothership.currentsize + "/" + mothership.max + "</span> <span id='shipNameMothership'>" + mothership.shipName +"</span> </li>";  
+    for (i=0; i < shipList.length; i++)
+    { 
+    	document.getElementById('shipList').innerHTML += "<li class='list-group-item'><span class='badge' id='ship" + i +"'>" + + shipList[i].currentsize + "/" + shipList[i].max  + "</span> <span id='" + shipList[i].shipName +"'>" + shipList[i].shipName + "</span> </li>"
+	
+    }  
     
 }
 
-function addShip(size)
+function addShip(size, facilitiesInput)
 {	//facilities array is as follows: generators, quarters, miners, oxygen, food, refineries, research, combat, storage
 	var newShip;
+
 	if(size === "Small")
-	{	 
-		newShip = {shipName:"Small Ship " + shipList.length, currentsize:0,max:250, facilities:[250,0,0,0,0,0,0,0,0]}
-		newShip.facilities[1] = document.getElementById('smallShipQuarters').innerHTML;
-		shipList.push(newShip);
+	{	
+		console.log("Creating small ship");
+		var name = $("#smallSName").val();
+		if(name === "") 
+		{
+			name = "Small Ship " + shipList.length;
+		}
+
+		newShip = {shipName:name, currentsize:0,max:250, facilities:[50,0,0,0,0,0,0,0,0]}
 		
+		for(i = 0; i < facilitiesInput.length; i++)
+		{
+			console.log("Adding facility " + i);
+			newShip.facilities[i] = facilitiesInput[i];
+		}
+		shipList.push(newShip);
 	}	
-}
-function calcSizeOfShip(facilities)
-{
-	var size = 0;
-	for(i=1; i < facilities.length; i++)
+
+	//reset and recalculate maximums
+	generatorsmax = 0;
+	quartersmax = 0;
+	autominersmax = 0;
+	lifesupportmax = 0;
+	farmsmax = 0;
+	refineriesmax = 0;
+	researchlabsmax = 0;
+	combatmax = 0;
+	storagemax = 0;
+	
+	setMaximumFacilities(mothership);
+	shipList.forEach(function(ship)
 	{
-		size += facilities[i];
-	}	
-	return size;
+    	setMaximumFacilities(ship);
+	});
+    
 }
 
 //functions to buy resources
@@ -369,11 +407,11 @@ function updateMaterials(){
 	storageamttotal = storage * storageamt;
 
 	//for each automated miner generate ice and metal
-	metals += autominers;
-	metalsbonus += autominers;
+	metals += Math.floor(autominers * (1 + (0.05 * advancedmining)));
+	metalsbonus += Math.floor(autominers * (1 + (0.05 * advancedmining)));
 	
-	ice += autominers;
-	icebonus += autominers;
+	ice += Math.floor(autominers * (1 + (0.05 * advancedmining)));
+	icebonus += Math.floor(autominers * (1 + (0.05 * advancedmining)));
 	
 	//check maximum and minimum
 	if(metals > storageamttotal)
@@ -546,20 +584,27 @@ function updateResearch(){
 	researchbonus = researchbonus + Math.floor(researchlabs * (1 + (0.05 * advancedresearch)));
 	
 }
-
+var popAlerted = false;
+var energyAlerted = false;
 //update all progress bars
 function updateBars()
 {
 	//population bar
 	var totalPop = workers + population;
-	
 	if(totalPop == populationmax)
 	{
+		if(!popAlerted)
+		{
+			addAlert("resourcealert","Maxiumum population reached! Build more crew quarters!!!");
+			popAlerted = true;	
+		}
 		replaceAllClassesonElement("workerprogressbar","progress-bar progress-bar-danger");
 		replaceAllClassesonElement("populationprogressbar","progress-bar progress-bar-warning");
 	}
 	if( totalPop != populationmax)
 	{
+		removeAlert("population");
+		popAlerted = false;
 		replaceAllClassesonElement("workerprogressbar","progress-bar progress-bar-info");
 		replaceAllClassesonElement("populationprogressbar","progress-bar");
 		replaceAllClassesonElement("populationleftprogressbar","progress-bar progress-bar-success");
@@ -567,23 +612,30 @@ function updateBars()
 	document.getElementById("population").innerHTML = population;
 	document.getElementById("workers").innerHTML = workers;
 	document.getElementById("populationleft").innerHTML = populationmax - totalPop;
-	document.getElementById('workerprogressbar').setAttribute("style", "width:" + Math.ceil((workers/populationmax) * 100) + "%;");
+	document.getElementById('workerprogressbar').setAttribute("style", "width:" + Math.floor((workers/populationmax) * 100) + "%;");
 	document.getElementById('populationprogressbar').setAttribute("style", "width:" + Math.ceil((population/populationmax) * 100) + "%;");
-	document.getElementById('populationleftprogressbar').setAttribute("style", "width:" + Math.ceil(((populationmax - totalPop)/populationmax) * 100) + "%;");
+	document.getElementById('populationleftprogressbar').setAttribute("style", "width:" + Math.floor(((populationmax - totalPop)/populationmax) * 100) + "%;");
 	
 	//energy bar
 	if(energy == energymax)
 	{
+		if(!energyAlerted)
+		{
+			addAlert("resourcealert","Maxiumum energy reached! Build more generators!!!");
+			energyAlerted = true;	
+		}
 		replaceAllClassesonElement("energyprogressbar", "progress-bar progress-bar-danger")
 	}
 	if(energy != energymax)
 	{
+		removeAlert("energy");
+		energyAlerted = false;
 		replaceAllClassesonElement("energyprogressbar", "progress-bar progress-bar-info")
 	}
 	document.getElementById("energy").innerHTML = energy;
 	document.getElementById('energyprogressbar').setAttribute("style", "width:" + Math.floor((energy/energymax) * 100) + "%;");
 	document.getElementById("energyleft").innerHTML = energymax - energy;
-	document.getElementById('energyleftprogressbar').setAttribute("style", "width:" + Math.ceil(((energymax - energy)/energymax) * 100) + "%;");
+	document.getElementById('energyleftprogressbar').setAttribute("style", "width:" + Math.floor(((energymax - energy)/energymax) * 100) + "%;");
 
 	//metals/ice bar
 	if (metalsbonus == 0 || metals == storageamttotal)
@@ -887,19 +939,40 @@ function calculateLinearCost(numToBuy, baseCost, numOfBuildings)
 	return totalCost;
 }
 
-function setMaximumFacilities(facilities)
+function setMaximumFacilities(ship)
 {
-	mothership.max = calcSizeOfShip(facilities);
-	generatorsmax = facilities[0];
-	quartersmax = facilities[1];
-	autominersmax = facilities[2];
-	lifesupportmax = facilities[3];
-	farmsmax = facilities[4];
-	refineriesmax = facilities[5];
-	researchlabsmax = facilities[6];
-	combatmax = facilities[7];
-	storagemax = facilities[8];
+	ship.max = calcSizeOfShip(ship.facilities);
+	generatorsmax += ship.facilities[0];
+	quartersmax += ship.facilities[1];
+	autominersmax += ship.facilities[2];
+	lifesupportmax += ship.facilities[3];
+	farmsmax += ship.facilities[4];
+	refineriesmax += ship.facilities[5];
+	researchlabsmax += ship.facilities[6];
+	combatmax += ship.facilities[7];
+	storagemax += ship.facilities[8];
 	
+}
+
+function calcSizeOfShip(facilities)
+{
+	var size = 0;
+	for(i=1; i < facilities.length; i++)
+	{
+		size += facilities[i];
+	}	
+	return size;
+}
+
+function addAlert(id,message) {
+    $('#' + id).append(
+        '<div class="alert alert-danger fade in">' +
+            '<button type="button" class="close" data-dismiss="alert">' +
+            '&times;</button>' + message + '</div>');
+}
+
+function removeAlert(message) {
+    $('.alert').remove(":contains('" + message + "')");
 }
 
 //JQuery click captures
@@ -997,16 +1070,95 @@ $("#stoBuyx100").on('click', function() {
 //ship construction Jquery
 //ship building buttons
 $("#buildSmallShip").on('click', function() {
-   addShip("Small");
+   var facilitiesValues = new Array();
+   $slider = $('input[id*="smallShip"]');
+   //set generator value
+   facilitiesValues.push(50);
+   $.each($slider, function(i, $s) {
+	   	if($s !== 'undefined' && $(this).val() !== "")
+		{		
+			facilitiesValues.push(parseInt($(this).slider('getValue')));
+		}
+	});
+   addShip("Small",facilitiesValues);
 });
 
+
+$originalValue = 0; //holds starting slider value for calculations
+$maxSmallShip = 250;
 //handling the sliders
-//small ship sliders
-$("#smallShipQuartersSliderBar").on('slide', function() {
-	$('#smallShipQuarters').html($('#smallShipQuartersSliderBar').val());
+
+$('input[id*="Ship"]').on("slide", function(slideEvt) {
+	$sliders = $('input[id*="Ship"]');
+	//gets badge ID and then inputs value to reflect current value of slider
+	$.each($sliders, function(i,$s){
+		$badgeID = "#" + $(this).slider('getAttribute','id').slice(0,-6);
+		$($badgeID).text($(this).slider('getValue'));
+	});
 });
-$("#smallShipMinersSliderBar").on('slide', function() {
-	$('#smallShipMiners').html($('#smallShipMinersSliderBar').val());
+
+$('input[id*="Ship"]').on("slideStop", function(slideEvt) {
+	$sliders = $('input[id*="Ship"]');
+	//gets badge ID and then inputs value to reflect current value of slider
+	$.each($sliders, function(i,$s){
+		$badgeID = "#" + $(this).slider('getAttribute','id').slice(0,-6);
+		$($badgeID).text($(this).slider('getValue'));
+	});
+});
+
+$('input[id*="Ship"]').on("slideStart", function(){
+	$originalValue = 0;
+	$originalValue = $(this).slider('getValue');
+});
+//small ship sliders
+
+$('input[id*="smallShip"]').on("slideStop", function(){
+	$totalVal = 0;
+	//update total value and badge value
+	$sliders = $('input[id*="smallShip"]');
+	//get total value of all sliders
+	$.each($sliders, function(i,$s){
+		$totalVal += parseInt($(this).slider('getValue'));
+	});
+	
+
+	$('#smallShipTotalValue').text($totalVal + "/" + $maxSmallShip);
+	$('#smallshiptotalvalueprogressbar').css("width", Math.floor(($totalVal/$maxSmallShip) * 100) + "%");
+});
+
+$('input[id*="smallShip"]').on("slide", function(){
+	$totalVal = 0;
+	$sliders = $('input[id*="smallShip"]');
+	//get total value of all sliders
+	$.each($sliders, function(i,$s){
+		$totalVal += parseInt($(this).slider('getValue'));
+	});
+
+	$('#smallShipTotalValue').text($totalVal + "/" + $maxSmallShip);
+	$('#smallshiptotalvalueprogressbar').css("width", Math.floor(($totalVal/$maxSmallShip) * 100) + "%");
+
+	//if total value is greater than 250, decrease random other slider value
+	if($totalVal > 250)
+	{
+		//remove current slider
+		$slidersToDecrease = $sliders.not($(this));
+		//remove sliders without value
+		$slidersLeft = $slidersToDecrease;
+		$.each($slidersToDecrease, function(i,$s){
+			if(parseInt($(this).slider('getValue')) == 0)
+			{
+				$slidersLeft = $slidersLeft.not($(this));
+			}
+		});	
+		var randomnumber = Math.floor(Math.random() * $slidersLeft.length ) + 1;	
+
+		var amountChanged = $(this).slider('getValue') - $originalValue;
+		var newValue = $slidersLeft.eq(randomnumber-1).slider('getValue') - amountChanged;
+		$slidersLeft.eq(randomnumber - 1).slider('setValue', newValue);
+		$originalValue = $(this).slider('getValue');
+	}
+	
+
 });
 
 //game loop
@@ -1014,5 +1166,24 @@ window.setInterval(function(){newDay();}, 1000);
 
 //On page load
 $(document).ready ( function(){
-	setMaximumFacilities(mothership.facilities);
-})
+	
+	$smallShipSliders = $('input[id*="smallShip"]');
+
+	$.each($smallShipSliders, function(i,$s){
+
+		$(this).slider({
+			min:0,
+			max:250,
+			step:1,
+			value:0,
+			selection:'before',
+			tooltip:'always',
+		});
+	});
+	$('#smallShipTotalValue').text( 0 + "/" + $maxSmallShip);
+
+	setMaximumFacilities(mothership);
+	
+	$('[data-toggle="tooltip"]').tooltip(); 
+	
+});

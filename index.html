@@ -5,11 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="bootstrap-slider/css/bootstrap-slider.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="slider/css/slider.css">
-  <script src="slider/js/bootstrap-slider.js"></script>
-</head>
+  <script src="bootstrap-slider/js/bootstrap-slider.js"></script>
 <body style="overflow-x: hidden;">
 
 <nav class="navbar navbar-inverse">
@@ -56,11 +55,14 @@
 </nav>
 
 
+
+
 <div class="container-fluid collapse in" id="resources">
 	<div class="page-header">
 		<h1>Resources</h1>
 	</div>
-
+<div id="resourcealert">
+</div>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-2 col-md-2 col-lg-2">
@@ -68,14 +70,14 @@
 			</div>
 			<div class="col-sm-8 col-md-8 col-lg-8">
 				<div class="progress">
-					<div id="workerprogressbar" class="progress-bar progress-bar-info" role="progressbar" style="width:100%">
-						<span id="workers"></span>
+					<div id="workerprogressbar" class="progress-bar progress-bar-info" role="progressbar" style="width:1%;min-width:1%;max-width:98%;">
+						<span class="progressbar-label" id="workers"></span>
 					</div>
-					<div id="populationprogressbar" class="progress-bar" role="progressbar" style="width:100%">
-						<span id="population"></span>
+					<div id="populationprogressbar" class="progress-bar" role="progressbar" style="width:1%;min-width:1%;max-width:98%;">
+						<span class="progressbar-label" id="population"></span>
 					</div>
-					<div id="populationleftprogressbar" class="progress-bar progress-bar-success" role="progressbar" style="width:100%">
-						<span id="populationleft"></span>
+					<div id="populationleftprogressbar" class="progress-bar progress-bar-success" role="progressbar" style="width:1%;min-width:1%;max-width:98%;">
+						<span class="progressbar-label" id="populationleft"></span>
 					</div>
 				</div>
 			</div>
@@ -108,10 +110,10 @@
 			<div class="col-sm-8 col-md-8 col-lg-8">
 				<div class="progress">
 					<div id="energyprogressbar" class="progress-bar progress-bar-info" role="progressbar" style="width:100%">
-						<span id="energy"></span>
+						<span class="progressbar-label" id="energy"></span>
 					</div>
 					<div id="energyleftprogressbar" class="progress-bar progress-bar-success" role="progressbar" style="width:100%">
-						<span id="energyleft"></span>
+						<span  class="progressbar-label" id="energyleft"></span>
 					</div>
 				</div>
 			</div>
@@ -133,7 +135,7 @@
 			<div class="col-sm-8 col-md-8 col-lg-8">
 				<div class="progress">
 					<div id="metalsprogressbar" class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width:70%">
-						<span id="metals"></span>
+						<span class="progressbar-label" id="metals"></span>
 					</div>
 				</div>
 			</div>
@@ -155,7 +157,7 @@
 			<div class="col-sm-8 col-md-8 col-lg-8">
 				<div class="progress">
 					<div id="iceprogressbar" class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width:70%">
-						<span id="ice"></span>
+						<span class="progressbar-label" id="ice"></span>
 					</div>
 				</div>
 			</div>
@@ -171,7 +173,7 @@
 			<div class="col-sm-8 col-md-8 col-lg-8">
 				<div class="progress">
 					<div id="oxygenprogressbar" class="progress-bar progress-bar-info" role="progressbar" style="width:70%">
-						<span id="oxygen"></span>
+						<span class="progressbar-label" id="oxygen"></span>
 					</div>
 				</div>
 			</div>
@@ -192,7 +194,7 @@
 			<div class="col-sm-8 col-md-8 col-lg-8">
 				<div class="progress">
 					<div id="foodprogressbar" class="progress-bar progress-bar-info" role="progressbar" style="width:70%">
-						<span id="food"></span>
+						<span class="progressbar-label" id="food"></span>
 					</div>
 				</div>
 			</div>
@@ -214,7 +216,7 @@
 			<div class="col-sm-8 col-md-8 col-lg-8">
 				<div class="progress">
 					<div id="waterprogressbar" class="progress-bar progress-bar-info" role="progressbar" style="width:70%">
-						<span id="water"></span>
+						<span class="progressbar-label" id="water"></span>
 					</div>
 				</div>
 			</div>
@@ -236,7 +238,7 @@
 			<div class="col-sm-8 col-md-8 col-lg-8">
 				<div class="progress">
 					<div id="researchprogressbar" class="progress-bar progress-bar-info" role="progressbar" style="width:100%">
-						<span id="researchpoints"></span>
+						<span class="progressbar-label" id="researchpoints"></span>
 					</div>
 				</div>
 			</div>
@@ -258,7 +260,7 @@
 			<div class="col-sm-8 col-md-8 col-lg-8">
 				<div class="progress">
 					<div id="creditsprogressbar" class="progress-bar progress-bar-success" role="progressbar" style="width:100%">
-						<span id="credits"></span>
+						<span class="progressbar-label" id="credits"></span>
 					</div>
 				</div>
 			</div>
@@ -299,7 +301,7 @@
 
 </div>
 
-<div class="container-fluid collapse" id="shipconstruction">
+<div class="container-fluid collapse in" id="shipconstruction">
 	<div class="page-header">
 		<h1>Ship Construction</h1>
 	</div>
@@ -313,13 +315,28 @@
 								<a class="list-group-item" data-toggle="collapse" data-parent="#shipConstructionAccordion" href="#smallShipConstruction">Construct Small Spaceship</a>
 							</h4>
 						</div>
-						<div id="smallShipConstruction" class="panel-collapse collapse">
+						<div id="smallShipConstruction" class="panel-collapse collapse in">
 							<div class="panel-body">
 								<ul class="list-group">
-									<li class="list-group-item"><span id="smallShipQuarters" class="badge">0</span> Quarters: <div id="smallShipQuartersSliderBar" class="slider slider-horizontal" data-slider-min="0" data-slider-max="250" data-slider-step="1" data-slider-value="0" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show"></div></li>
-									<li class="list-group-item"><span id="smallShipMiners" class="badge">0</span> Autominers: <div id="smallShipMinersSliderBar" class="slider slider-horizontal" data-slider-min="0" data-slider-max="250" data-slider-step="1" data-slider-value="0" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show"></div></li>
+									<li class="list-group-item"><label>Name:</label> <input id="smallSName"type="text"></li>
+									<li class="list-group-item"><span id="smallShipQuarters" class="badge">0</span> Quarters: <input id="smallShip1" data-slider-id='smallShipQuartersSlider' type="text" /></li>
+									<li class="list-group-item"><span id="smallShipMiners" class="badge">0</span> Autominers: <input id="smallShip2" data-slider-id='smallShipMinersSlider' type="text" /></li>
+									<li class="list-group-item"><span id="smallShipOxygen" class="badge">0</span> OxygenGenerators: <input id="smallShip3" data-slider-id='smallShipOxygenSlider' type="text" /></li>
+									<li class="list-group-item"></li>
 								</ul>
-								<a class="btn btn-default btn-block" id="buildSmallShip" href="#buildSmallShip">Build Ship</a>
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-lg-12">
+											<div id="smallshiptotalvalueprogressbar" class="progress-bar progress-bar-default" role="progressbar" style="width:0%">
+												<span class="progressbar-label" id="smallShipTotalValue">0</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="panel-footer">
+									<a class="btn btn-default btn-block" id="buildSmallShip" href="#buildSmallShip">Build Ship</a>
+								</div>
+								
 							</div>
 						</div>
 					</div>
@@ -351,8 +368,7 @@
 						<h4 class="panel-title">Ship List</h4>
 					</div>
 					<div class="panel-body">
-						<ul class="list-group">
-							<li class="list-group-item"><span class="badge" id="shipSizeMothership"></span> <span id="shipNameMothership"></span> </li>
+						<ul class="list-group" id="shipList">
 						</ul>
 					</div>
 				</div>
@@ -363,14 +379,6 @@
 </div>
 
 <script type="text/javascript" src="main.js"></script>	
-<script>
 
-$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip(); 
-$('.slider').slider();
-});
-
-
-</script>
 </body>
 </html>

@@ -186,8 +186,15 @@ function addShip(size, facilitiesInput)
 //functions to buy resources
 function Recruit(numToBuy)
 {
-	var recruitCost = 1 * numToBuy;
-    if(oxygen >= recruitCost && water >= recruitCost && food >= recruitCost && credits >= recruitCost && population + workers < populationmax && numToBuy > 0) {                               
+	var baseCost = 1;
+	var coefficient = 1.05;
+	var recruitCost = 0;
+	for (i=0; i < numToBuy; i++)
+	{
+		recruitCost += baseCost + Math.floor(pow((population + workers + i), coefficient));
+	}
+
+	if(oxygen >= recruitCost && water >= recruitCost && food >= recruitCost && credits >= recruitCost && population + workers < populationmax && numToBuy > 0) {                               
 		
 		oxygen = oxygen - recruitCost;
 		food = food - recruitCost;
@@ -1121,10 +1128,13 @@ $('input[id*="smallShip"]').on("slideStop", function(){
 		$totalVal += parseInt($(this).slider('getValue'));
 	});
 	
+	$lastVal = $totalVal;
 
 	$('#smallShipTotalValue').text($totalVal + "/" + $maxSmallShip);
 	$('#smallshiptotalvalueprogressbar').css("width", Math.floor(($totalVal/$maxSmallShip) * 100) + "%");
 });
+
+$lastTotal = 0;
 
 $('input[id*="smallShip"]').on("slide", function(){
 	$totalVal = 0;
@@ -1134,14 +1144,25 @@ $('input[id*="smallShip"]').on("slide", function(){
 		$totalVal += parseInt($(this).slider('getValue'));
 	});
 
+	$lastVal = $totalVal;
+
 	$('#smallShipTotalValue').text($totalVal + "/" + $maxSmallShip);
 	$('#smallshiptotalvalueprogressbar').css("width", Math.floor(($totalVal/$maxSmallShip) * 100) + "%");
 
+	$('#smallShip1').slider('setValue', Math.floor($lastVal/10));
+	
 	//if total value is greater than 250, decrease random other slider value
 	if($totalVal > 250)
 	{
 		//remove current slider
 		$slidersToDecrease = $sliders.not($(this));
+		//remove quarters slider from if it is at minimum
+		//set tp minimum if it is below
+		if(parseInt($('#smallShip1').slider('getValue')) <= 25)
+		{
+			$('#smallShip1').slider('setValue', 25);
+			$slidersToDecrease = $slidersToDecrease.not($('#smallShip1'))
+		}
 		//remove sliders without value
 		$slidersLeft = $slidersToDecrease;
 		$.each($slidersToDecrease, function(i,$s){
